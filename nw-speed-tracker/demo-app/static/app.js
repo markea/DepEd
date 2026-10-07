@@ -108,7 +108,7 @@ function loadGoogleMapsAndInit() {
       .then(data => {
         return new Promise((resolve, reject) => {
           const script = document.createElement("script");
-          script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(data.maps_api_key)}&libraries=visualization&v=weekly`;
+          script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(data.maps_api_key)}&libraries=visualization&v=3.64`;
           script.async = true;
           script.onload = () => {
             initMap();
@@ -213,61 +213,104 @@ function renderMapLayers() {
 
   // Clear existing HeatmapLayer
   if (googleHeatmapLayer) {
-    googleHeatmapLayer.setMap(null);
+    try {
+      googleHeatmapLayer.setMap(null);
+    } catch (e) {}
     googleHeatmapLayer = null;
   }
 
-  // Clear existing Markers
-  googleMarkers.forEach(m => m.setMap(null));
+  // Clear existing Markers & Circles
+  googleMarkers.forEach(m => {
+    try {
+      m.setMap(null);
+    } catch (e) {}
+  });
   googleMarkers = [];
 
   if (activeMapLayerMode === "heat") {
-    // Generate Google Maps Weighted LatLng points
+    // 1. Native Google Maps HeatmapLayer
     const heatData = mapDataFeatures
       .filter(f => f.latitude && f.longitude)
-      .map(f => ({
-        location: new google.maps.LatLng(f.latitude, f.longitude),
-        weight: (f.heat_weight || 0.5) * 8
-      }));
-
-    if (google.maps.visualization && google.maps.visualization.HeatmapLayer) {
-      googleHeatmapLayer = new google.maps.visualization.HeatmapLayer({
-        data: heatData,
-        map: phMap,
-        radius: 35,
-        opacity: 0.85,
-        gradient: [
-          "rgba(0, 0, 0, 0)",
-          "rgba(56, 189, 248, 0.7)",   // Cyan
-          "rgba(250, 204, 21, 0.8)",   // Yellow
-          "rgba(249, 115, 22, 0.9)",   // Orange
-          "rgba(239, 68, 68, 1.0)"     // Red (Critical Outage)
-        ]
+      .map(f => {
+        const rawWeight = (f.heat_weight != null ? f.heat_weight : 0.6);
+        return {
+          location: new google.maps.LatLng(f.latitude, f.longitude),
+          weight: Math.max(1, rawWeight * 12)
+        };
       });
+
+    try {
+      if (google.maps.visualization && typeof google.maps.visualization.HeatmapLayer === "function") {
+        googleHeatmapLayer = new google.maps.visualization.HeatmapLayer({
+          data: heatData,
+          map: phMap,
+          radius: 55,
+          maxIntensity: 6,
+          dissipating: true,
+          opacity: 0.85,
+          gradient: [
+            "rgba(0, 0, 0, 0)",
+            "rgba(56, 189, 248, 0.7)",   // Cyan (Weather/Satellite)
+            "rgba(250, 204, 21, 0.85)",  // Yellow (Wi-Fi/Congestion)
+            "rgba(249, 115, 22, 0.95)",  // Orange (Throttling)
+            "rgba(239, 68, 68, 1.0)"     // Red (Critical Outage)
+          ]
+        });
+      }
+    } catch (err) {
+      console.warn("Native HeatmapLayer warning:", err);
     }
 
-    // In heat mode, also add subtle clickable circle markers for schools
+    // 2. High-Visibility Multi-Tier Thermal Heat Blooms
+    // Draws layered thermal gradient halos so the heat map layer is immediately, boldly visible across the entire Philippines map
     mapDataFeatures.forEach(feat => {
       if (!feat.latitude || !feat.longitude) return;
+      const isOutage = feat.severity === "CRITICAL";
+      const isThrottling = feat.severity === "HIGH";
+      const baseColor = feat.badge_color || (isOutage ? "#ef4444" : (isThrottling ? "#f97316" : "#eab308"));
 
-      const circle = new google.maps.Circle({
-        strokeColor: "#FFFFFF",
-        strokeOpacity: 0.8,
-        strokeWeight: 1.5,
-        fillColor: feat.badge_color,
-        fillOpacity: 0.75,
+      // Outer thermal heat plume (40km - 65km)
+      const outerHalo = new google.maps.Circle({
+        strokeWeight: 0,
+        fillColor: baseColor,
+        fillOpacity: isOutage ? 0.35 : (isThrottling ? 0.28 : 0.20),
         map: phMap,
         center: { lat: feat.latitude, lng: feat.longitude },
-        radius: feat.severity === "CRITICAL" ? 9000 : 6000
+        radius: isOutage ? 65000 : (isThrottling ? 45000 : 35000),
+        clickable: false
+      });
+      googleMarkers.push(outerHalo);
+
+      // Mid-layer thermal core (20km - 32km)
+      const midHalo = new google.maps.Circle({
+        strokeWeight: 0,
+        fillColor: baseColor,
+        fillOpacity: isOutage ? 0.55 : (isThrottling ? 0.45 : 0.35),
+        map: phMap,
+        center: { lat: feat.latitude, lng: feat.longitude },
+        radius: isOutage ? 32000 : (isThrottling ? 22000 : 16000),
+        clickable: false
+      });
+      googleMarkers.push(midHalo);
+
+      // Core clickable hotspot badge
+      const coreCircle = new google.maps.Circle({
+        strokeColor: "#FFFFFF",
+        strokeOpacity: 0.9,
+        strokeWeight: 1.5,
+        fillColor: baseColor,
+        fillOpacity: 0.95,
+        map: phMap,
+        center: { lat: feat.latitude, lng: feat.longitude },
+        radius: isOutage ? 10000 : 7000
       });
 
-      circle.addListener("click", () => {
+      coreCircle.addListener("click", () => {
         googleInfoWindow.setContent(buildSchoolPopupHtml(feat));
         googleInfoWindow.setPosition({ lat: feat.latitude, lng: feat.longitude });
         googleInfoWindow.open(phMap);
       });
-
-      googleMarkers.push(circle);
+      googleMarkers.push(coreCircle);
     });
 
   } else {
@@ -295,6 +338,20 @@ function renderMapLayers() {
       });
 
       googleMarkers.push(marker);
+
+      // Contracted CIR radius ring
+      const cirRing = new google.maps.Circle({
+        strokeColor: feat.badge_color,
+        strokeOpacity: 0.7,
+        strokeWeight: 1,
+        fillColor: feat.badge_color,
+        fillOpacity: 0.12,
+        map: phMap,
+        center: { lat: feat.latitude, lng: feat.longitude },
+        radius: Math.max(3000, feat.contracted_dl_mbps * 120),
+        clickable: false
+      });
+      googleMarkers.push(cirRing);
     });
   }
 }
