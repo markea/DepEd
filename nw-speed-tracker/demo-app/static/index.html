@@ -9,6 +9,12 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Leaflet & Leaflet.heat Geospatial Visualization -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
@@ -95,9 +101,77 @@
         </div>
       </div>
 
-      <!-- Regional Heatmap & ISP SLA Leaderboard -->
+      <!-- Interactive Philippine School Connectivity Heatmap & Geospatial Cluster Analyzer -->
+      <div class="card space-y-4 border border-blue-800/40">
+        <div class="flex flex-wrap justify-between items-center gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-red-950 text-red-300 border border-red-800 animate-pulse">
+                <i class="fa-solid fa-satellite-dish mr-1"></i> LIVE GEOSPATIAL TELEMETRY
+              </span>
+              <h2 class="text-base font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-map-location-dot text-yellow-400"></i> Nationwide School Connectivity Issues Heatmap
+              </h2>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">
+              Geospatial density of WAN outages, ISP selective throttling, local Wi-Fi bottlenecks, and SLA breaches across 47,000 public schools.
+            </p>
+          </div>
+
+          <!-- Controls: Filters, Layers, and Hotspot Shortcuts -->
+          <div class="flex flex-wrap items-center gap-2 text-xs">
+            <!-- Issue Filter Pills -->
+            <div class="inline-flex rounded-lg bg-slate-800/90 p-1 border border-slate-700" id="mapFilterPills">
+              <button class="px-2.5 py-1 rounded text-xs font-semibold bg-blue-600 text-white map-filter-btn active" data-issue="ALL">All Schools</button>
+              <button class="px-2.5 py-1 rounded text-xs font-semibold text-slate-300 hover:text-white map-filter-btn" data-issue="OUTAGE">🔴 Outages</button>
+              <button class="px-2.5 py-1 rounded text-xs font-semibold text-slate-300 hover:text-white map-filter-btn" data-issue="THROTTLING">🟠 Throttling</button>
+              <button class="px-2.5 py-1 rounded text-xs font-semibold text-slate-300 hover:text-white map-filter-btn" data-issue="WIFI_EXEMPT">🟡 Wi-Fi (Exempt)</button>
+              <button class="px-2.5 py-1 rounded text-xs font-semibold text-slate-300 hover:text-white map-filter-btn" data-issue="SLA_BREACH">⚖️ SLA Breaches</button>
+            </div>
+
+            <!-- Layer Mode: Heatmap vs Pins -->
+            <div class="inline-flex rounded-lg bg-slate-800/90 p-1 border border-slate-700">
+              <button id="btnLayerHeat" class="px-2.5 py-1 rounded text-xs font-semibold bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 flex items-center gap-1">
+                <i class="fa-solid fa-fire-flame-curved"></i> Heat Density
+              </button>
+              <button id="btnLayerPins" class="px-2.5 py-1 rounded text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-1">
+                <i class="fa-solid fa-location-dot"></i> School Pins
+              </button>
+            </div>
+
+            <!-- Quick Hotspot Jump Buttons -->
+            <div class="flex items-center gap-1 bg-slate-800/80 px-2 py-1 rounded border border-slate-700">
+              <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Hotspots:</span>
+              <button class="text-[11px] px-2 py-0.5 rounded bg-red-950/80 hover:bg-red-900 text-red-300 border border-red-800 transition" onclick="zoomToHotspot(11.1578, 124.9912, 11, 'R08')">Leyte Cut (R08)</button>
+              <button class="text-[11px] px-2 py-0.5 rounded bg-orange-950/80 hover:bg-orange-900 text-orange-300 border border-orange-800 transition" onclick="zoomToHotspot(14.4586, 120.9427, 12, 'R04A')">Cavite Throttling (R04A)</button>
+              <button class="text-[11px] px-2 py-0.5 rounded bg-sky-950/80 hover:bg-sky-900 text-sky-300 border border-sky-800 transition" onclick="zoomToHotspot(6.7042, 121.9711, 10, 'BARMM')">Basilan Weather</button>
+              <button class="text-[11px] px-2 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-slate-200 transition" onclick="resetMapView()" title="Reset to Philippines national view"><i class="fa-solid fa-expand"></i> Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map Canvas -->
+        <div id="phConnectivityMap" class="w-full h-[480px] rounded-xl overflow-hidden border border-slate-700 relative z-10 shadow-inner"></div>
+
+        <!-- Legend and Live Stats Bar -->
+        <div class="flex flex-wrap justify-between items-center gap-3 pt-2 border-t border-slate-800 text-xs">
+          <div class="flex flex-wrap items-center gap-4 text-slate-300">
+            <span class="font-bold text-slate-400">Map Legend:</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-red-500 inline-block shadow-sm shadow-red-500/50"></span> <strong>🔴 Red:</strong> Critical Fiber/WAN Outage</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-orange-500 inline-block shadow-sm shadow-orange-500/50"></span> <strong>🟠 Orange:</strong> ISP Selective Throttling</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-yellow-400 inline-block"></span> <strong>🟡 Yellow:</strong> Local Wi-Fi Issue (SLA Exempt)</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-sky-400 inline-block"></span> <strong>🔵 Cyan:</strong> LEO Weather / Satellite Rain Fade</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span> <strong>🟢 Green:</strong> 100% Compliant CIR</span>
+          </div>
+          <div id="mapTelemetryBadge" class="text-slate-400 font-mono text-[11px]">
+            Showing <strong id="mapVisibleCount" class="text-white">18</strong> schools | Bounding box: Philippines Archipelago
+          </div>
+        </div>
+      </div>
+
+      <!-- Regional Summary Cards & ISP SLA Leaderboard -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- 17-Region Heatmap Card -->
+        <!-- 17-Region Grid Card -->
         <div class="lg:col-span-7 card flex flex-col">
           <div class="flex justify-between items-center mb-4">
             <div>

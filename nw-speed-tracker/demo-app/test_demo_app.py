@@ -130,3 +130,39 @@ def test_08_simulator_scenarios():
     thr_data = thr_res.json()
     assert thr_data["is_selective_throttling"] is True
     assert thr_data["is_sla_breach_eligible"] is True
+
+
+def test_09_geospatial_school_map_issues():
+    # 1. Fetch All Features
+    res = client.get("/api/v1/schools/map-issues")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "SUCCESS"
+    assert data["filtered_count"] >= 18
+    assert "summary" in data
+    assert data["summary"]["outages"] >= 4
+    assert data["summary"]["throttling"] >= 1
+
+    # Verify Philippine Bounding Box for all coordinates
+    for feat in data["features"]:
+        assert 4.5 <= feat["latitude"] <= 21.5, f"Lat out of PH bounds: {feat['latitude']}"
+        assert 116.0 <= feat["longitude"] <= 127.0, f"Lon out of PH bounds: {feat['longitude']}"
+        assert "heat_weight" in feat
+        assert 0.0 <= feat["heat_weight"] <= 1.0
+
+    # 2. Filter by OUTAGE
+    outage_res = client.get("/api/v1/schools/map-issues?issue_type=OUTAGE")
+    assert outage_res.status_code == 200
+    outage_data = outage_res.json()
+    assert outage_data["filtered_count"] >= 4
+    for feat in outage_data["features"]:
+        assert feat["issue_category"] == "OUTAGE"
+        assert feat["severity"] == "CRITICAL"
+
+    # 3. Filter by Region R08 (Leyte)
+    r08_res = client.get("/api/v1/schools/map-issues?region_id=R08")
+    assert r08_res.status_code == 200
+    r08_data = r08_res.json()
+    assert r08_data["filtered_count"] >= 4
+    assert all(f["region_id"] == "R08" for f in r08_data["features"])
+

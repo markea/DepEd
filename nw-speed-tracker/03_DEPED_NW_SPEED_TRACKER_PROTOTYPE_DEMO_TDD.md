@@ -124,19 +124,28 @@ When implemented inside [`/usr/local/google/home/markea/Desktop/DepEd/nw-speed-t
 +-------------------------------------------------------------------------------------------------------+
 | [KPI 1: Enrolled DCP PCs]  [KPI 2: School-Hour Uptime]  [KPI 3: Avg Speed vs CIR]  [KPI 4: SLA Rebate]|
 |   46,412 / 47,000 (98.7%)    96.4% (Mon-Fri 7AM-5PM)      78.2% of Contracted       ₱4,820,500.00     |
++-------------------------------------------------------------------------------------------------------+
+| 🗺️ NATIONWIDE SCHOOL CONNECTIVITY ISSUES GEOSPATIAL HEATMAP (Leaflet.js + Leaflet.heat + CartoDB Dark) |
+| [Filter: All | 🔴 Outages | 🟠 Throttling | 🟡 Wi-Fi Exempt | ⚖️ SLA Breaches]   [Heat Density | Pins] |
+| [Hotspot Jumps: Leyte Cut (R08) | Cavite Throttling (R04A) | Basilan Weather (BARMM) | National Reset]|
+|  - Heat Density Cloud: Visualizes archipelago-wide severity gradients                                 |
+|  - School Pins: Interactive markers with diagnostic badges, speed deltas, and 1-click School Portal   |
 +---------------------------------------------------+---------------------------------------------------+
-| 🗺️ PHILIPPINES REGIONAL CONNECTIVITY HEATMAP      | 🏆 NATIONAL ISP SLA COMPLIANCE & ANTI-GAMING      |
-| [Interactive Leaflet / SVG Map of 17 PH Regions]  | ISP Name         | Anchor Speed | Public | Rebate |
-| • NCR: 94.2% Compliance (Green)                   | PLDT Enterprise  | 84.5%        | 92.1%  | ₱1.12M |
-| • Region IV-A: 82.1% Compliance (Amber)           | Converge ICT     | 88.0%        | 90.4%  | ₱0.64M |
-| • Region VIII: 61.4% (Red - Leyte Fiber Cut!)     | Globe Business   | 76.2%        | 89.5%  | ₱1.45M |
-| • BARMM: 71.8% (Starlink Rain Fade Advisory)      | SpeedNet Regional| 21.4% ⚠️     | 95.0%  | ₱1.61M |
+| 🗺️ 17 PHILIPPINE REGIONS CONNECTIVITY BREAKDOWN    | 🏆 NATIONAL ISP SLA COMPLIANCE & ANTI-GAMING      |
+| • NCR: 94.2% Compliance (Green)                   | ISP Name         | Anchor Speed | Public | Rebate |
+| • Region IV-A: 82.1% Compliance (Amber)           | PLDT Enterprise  | 84.5%        | 92.1%  | ₱1.12M |
+| • Region VIII: 61.4% (Red - Leyte Fiber Cut!)     | Converge ICT     | 88.0%        | 90.4%  | ₱0.64M |
+| • BARMM: 71.8% (Starlink Rain Fade Advisory)      | Globe Business   | 76.2%        | 89.5%  | ₱1.45M |
+|                                                   | SpeedNet Regional| 21.4% ⚠️     | 95.0%  | ₱1.61M |
 +---------------------------------------------------+---------------------------------------------------+
 ```
 
 - **Key Interactive Features:**
-  - Clicking any of the **17 Philippine Regions** on the map filters the regional health breakdown and drills directly into Tab 2.
-  - Highlights the **Dual-Probe Anti-Gaming Delta**: exposes when an ISP reports `95.0%` on public speedtest servers (`MLAB_NDT7 / Ookla`) while delivering only `21.4%` to the **DepEd Cloud Anchor** (`⚠️ ISP Selective Throttling Flagged`).
+  - **Archipelago-Wide Issue Density Heatmap (`#phConnectivityMap`):** Zero-API-key Leaflet + Leaflet.heat map rendering 18 pre-seeded showcase schools with realistic coordinates spanning Luzon, Visayas, and Mindanao.
+  - **Dynamic Layer Toggling:** Switch seamlessly between smooth continuous **Heat Density Cloud** and individual **Color-Coded School Pins** (🔴 Red: Outages, 🟠 Orange: Throttling, 🟡 Yellow: Wi-Fi Exempt, 🔵 Cyan: Weather, 🟢 Green: Compliant).
+  - **Issue Category Filters & Hotspot Shortcuts:** Filter by issue type or jump directly to known clusters (Leyte Fiber Cut, Cavite Throttling, Basilan Satellite Weather).
+  - **Interactive Popups & 1-Click Drilldown:** Clicking any school marker reveals BEIS ID, assigned ISP, actual vs contracted CIR, anti-gaming status, and an **"Open School Portal ($0 BI)"** button that instantly transitions to Tab 3 with that school preloaded.
+  - **Dual-Probe Anti-Gaming Delta:** Exposes when an ISP reports `95.0%` on public speedtest servers (`MLAB_NDT7 / Ookla`) while delivering only `21.4%` to the **DepEd Cloud Anchor** (`⚠️ ISP Selective Throttling Flagged`).
 
 ---
 

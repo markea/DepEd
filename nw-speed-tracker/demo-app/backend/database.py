@@ -73,6 +73,8 @@ def init_db(force_reseed=False):
             division_id TEXT NOT NULL,
             division_name TEXT NOT NULL,
             municipality TEXT NOT NULL,
+            latitude REAL NOT NULL,
+            longitude REAL NOT NULL,
             isp_id TEXT NOT NULL,
             isp_name TEXT NOT NULL,
             connection_type TEXT NOT NULL,
@@ -218,105 +220,118 @@ def seed_prototype_data(conn):
     ]
     cur.executemany("INSERT INTO isps VALUES (?,?,?,?,?,?,?,?,?,?)", isps_data)
 
-    # Seed 5 Showcase Schools
+    # Seed 18 Representative Showcase Schools across Luzon, Visayas, Mindanao with PH coordinates
     schools_data = [
         (
-            "104512",
-            "Bacoor National High School",
-            "R04A",
-            "Region IV-A (CALABARZON)",
-            "DIV-CAVITE",
-            "Cavite Province",
-            "Bacoor City",
-            "ISP-SPEEDNET",
-            "SpeedNet Regional",
-            "FIBER",
-            100.0,
-            100.0,
-            12500.00,
-            "DCP-WIN-104512-01",
-            "ISP_SELECTIVE_THROTTLING",
+            "104512", "Bacoor National High School", "R04A", "Region IV-A (CALABARZON)", "DIV-CAVITE", "Cavite Province", "Bacoor City",
+            14.4586, 120.9427, "ISP-SPEEDNET", "SpeedNet Regional", "FIBER", 100.0, 100.0, 12500.00, "DCP-WIN-104512-01", "ISP_SELECTIVE_THROTTLING",
             "Your Admin PC has a healthy 1.2ms Ethernet connection to the router. Speed to DepEd Cloud drops to 14 Mbps between 10 AM and 2 PM while public speedtest shows 95 Mbps. This confirms ISP selective throttling.",
             "Maayos ang 1.2ms Ethernet connection ng PC sa school router. Bumabagsak sa 14 Mbps ang bilis sa DepEd Cloud tuwing 10 AM-2 PM habang 95 Mbps sa public speedtest. Nagpapatunay ito ng selective throttling ng ISP.",
         ),
         (
-            "109821",
-            "Tondo Elementary School",
-            "NCR",
-            "National Capital Region",
-            "DIV-MANILA",
-            "City of Manila",
-            "Tondo",
-            "ISP-CNVRG",
-            "Converge ICT",
-            "FIBER",
-            100.0,
-            100.0,
-            11500.00,
-            "DCP-WIN-109821-01",
-            "LOCAL_WIFI_BOTTLENECK",
+            "104513", "Imus National High School", "R04A", "Region IV-A (CALABARZON)", "DIV-CAVITE", "Cavite Province", "Imus City",
+            14.4296, 120.9367, "ISP-SPEEDNET", "SpeedNet Regional", "FIBER", 100.0, 100.0, 12500.00, "DCP-WIN-104513-01", "ISP_SELECTIVE_THROTTLING",
+            "SpeedNet connection shows artificial throttling down to 15.1 Mbps during school instructional hours despite 96 Mbps public speedtest.",
+            "Bumabagsak sa 15.1 Mbps ang SpeedNet tuwing oras ng klase kahit 96 Mbps sa labas.",
+        ),
+        (
+            "104514", "Dasmariñas Integrated High School", "R04A", "Region IV-A (CALABARZON)", "DIV-CAVITE", "Cavite Province", "Dasmariñas City",
+            14.3294, 120.9367, "ISP-SPEEDNET", "SpeedNet Regional", "FIBER", 100.0, 100.0, 12500.00, "DCP-WIN-104514-01", "ISP_SELECTIVE_THROTTLING",
+            "Confirmed selective traffic shaping on Cavite fiber ring during peak instructional hours.",
+            "Kumpirmadong traffic shaping sa Cavite fiber ring tuwing peak hours.",
+        ),
+        (
+            "109821", "Tondo Elementary School", "NCR", "National Capital Region", "DIV-MANILA", "City of Manila", "Tondo",
+            14.6159, 120.9678, "ISP-CNVRG", "Converge ICT", "FIBER", 100.0, 100.0, 11500.00, "DCP-WIN-109821-01", "LOCAL_WIFI_BOTTLENECK",
             "Your Admin PC is connected via weak Wi-Fi (-86 dBm RSSI) with 98ms router latency. The ISP fiber line is healthy. Connect your PC via an Ethernet LAN cable to restore full speed. Exempt from ISP SLA penalty.",
             "Mahina ang Wi-Fi signal (-86 dBm) ng Admin PC papunta sa router (98ms latency). Walang sira ang fiber ng ISP. Isaksak ang Ethernet cable sa PC. Hindi ito sisingilin bilang multa sa ISP.",
         ),
         (
-            "121405",
-            "Palo National High School",
-            "R08",
-            "Region VIII (Eastern Visayas)",
-            "DIV-LEYTE",
-            "Leyte Division",
-            "Palo",
-            "ISP-PLDT",
-            "PLDT Enterprise",
-            "FIBER",
-            100.0,
-            100.0,
-            12500.00,
-            "DCP-WIN-121405-01",
-            "REGIONAL_FIBER_CUT",
+            "109822", "Ramon Magsaysay High School", "NCR", "National Capital Region", "DIV-MANILA", "City of Manila", "Sampaloc",
+            14.6062, 120.9932, "ISP-CNVRG", "Converge ICT", "FIBER", 100.0, 100.0, 11500.00, "DCP-WIN-109822-01", "HEALTHY_COMPLIANT",
+            "100% compliant fiber connection in Manila Division. 97.2 Mbps average speed.",
+            "100% compliant ang fiber connection sa Manila Division. 97.2 Mbps average.",
+        ),
+        (
+            "121405", "Palo National High School", "R08", "Region VIII (Eastern Visayas)", "DIV-LEYTE", "Leyte Division", "Palo",
+            11.1578, 124.9912, "ISP-PLDT", "PLDT Enterprise", "FIBER", 100.0, 100.0, 12500.00, "DCP-WIN-121405-01", "REGIONAL_FIBER_CUT",
             "School router is powered and responsive (1.4ms). 24 neighboring schools in Leyte Division dropped offline simultaneously at 10:14 AM. Classified as a Regional Fiber Backbone Cut. Master Ticket #DEPED-INC-9012 is active.",
             "Buhay at sumasagot ang router ng paaralan (1.4ms). Sabay-sabay na nawalan ng internet ang 24 na paaralan sa Leyte bandang 10:14 AM dahil sa naputol na fiber backbone. Aktibo na ang Master Ticket #DEPED-INC-9012.",
         ),
         (
-            "139501",
-            "Basilan Island National High School",
-            "BARMM",
-            "Bangsamoro Autonomous Region",
-            "DIV-BASILAN",
-            "Basilan Division",
-            "Isabela City",
-            "ISP-STLK",
-            "Starlink PH",
-            "SATELLITE_LEO",
-            50.0,
-            20.0,
-            9500.00,
-            "DCP-WIN-139501-01",
-            "RURAL_SATELLITE_WEATHER",
+            "121406", "Tanauan National High School", "R08", "Region VIII (Eastern Visayas)", "DIV-LEYTE", "Leyte Division", "Tanauan",
+            11.1114, 125.0182, "ISP-PLDT", "PLDT Enterprise", "FIBER", 100.0, 100.0, 12500.00, "DCP-WIN-121406-01", "REGIONAL_FIBER_CUT",
+            "Cluster fiber cut impact confirmed. Local router reachable; WAN offline.",
+            "Apektado ng cluster fiber cut. Sumasagot ang router; patay ang WAN.",
+        ),
+        (
+            "121407", "Tolosa National High School", "R08", "Region VIII (Eastern Visayas)", "DIV-LEYTE", "Leyte Division", "Tolosa",
+            11.0617, 125.0347, "ISP-PLDT", "PLDT Enterprise", "FIBER", 100.0, 100.0, 12500.00, "DCP-WIN-121407-01", "REGIONAL_FIBER_CUT",
+            "Cluster fiber cut impact confirmed. Correlated under Master Regional Ticket #DEPED-INC-9012.",
+            "Apektado ng cluster fiber cut. Kasama sa Master Regional Ticket #DEPED-INC-9012.",
+        ),
+        (
+            "121408", "Dulag National High School", "R08", "Region VIII (Eastern Visayas)", "DIV-LEYTE", "Leyte Division", "Dulag",
+            10.9525, 125.0322, "ISP-PLDT", "PLDT Enterprise", "FIBER", 100.0, 100.0, 12500.00, "DCP-WIN-121408-01", "REGIONAL_FIBER_CUT",
+            "Cluster fiber cut impact confirmed. Feeder line severed along Pan-Philippine Highway.",
+            "Apektado ng cluster fiber cut kasama ng mga karatig-paaralan sa Leyte.",
+        ),
+        (
+            "139501", "Basilan Island National High School", "BARMM", "Bangsamoro Autonomous Region", "DIV-BASILAN", "Basilan Division", "Isabela City",
+            6.7042, 121.9711, "ISP-STLK", "Starlink PH", "SATELLITE_LEO", 50.0, 20.0, 9500.00, "DCP-WIN-139501-01", "RURAL_SATELLITE_WEATHER",
             "Starlink satellite connection active with 15 MB capped testing. Heavy rain-fade observed with 640ms latency and 8.5% packet loss. Normal LEO satellite weather recovery expected.",
             "Aktibo ang koneksyon ng Starlink satellite gamit ang 15 MB data-cap mode. Nakaranas ng rain-fade (640ms ping, 8.5% packet loss) dulot ng masamang panahon. Kusa itong babalik sa normal paghupa ng ulan.",
         ),
         (
-            "112804",
-            "Iloilo Central Elementary School",
-            "R06",
-            "Region VI (Western Visayas)",
-            "DIV-ILOILO",
-            "Iloilo Province",
-            "Iloilo City",
-            "ISP-GLOBE",
-            "Globe Business",
-            "FIBER",
-            100.0,
-            100.0,
-            12000.00,
-            "DCP-WIN-112804-01",
-            "HEALTHY_COMPLIANT",
+            "139502", "Lamitan National High School", "BARMM", "Bangsamoro Autonomous Region", "DIV-BASILAN", "Basilan Division", "Lamitan City",
+            6.6500, 122.1333, "ISP-STLK", "Starlink PH", "SATELLITE_LEO", 50.0, 20.0, 9500.00, "DCP-WIN-139502-01", "RURAL_SATELLITE_WEATHER",
+            "Starlink LEO terminal experiencing tropical storm rain fade. Automated storm advisory linked.",
+            "Starlink terminal nakakaranas ng rain fade dahil sa sama ng panahon sa Basilan.",
+        ),
+        (
+            "112804", "Iloilo Central Elementary School", "R06", "Region VI (Western Visayas)", "DIV-ILOILO", "Iloilo Province", "Iloilo City",
+            10.6969, 122.5644, "ISP-GLOBE", "Globe Business", "FIBER", 100.0, 100.0, 12000.00, "DCP-WIN-112804-01", "HEALTHY_COMPLIANT",
             "100% compliant fiber connection. Average download speed is 96.4 Mbps during school hours with 0.0% packet loss and 1.1ms local gateway latency. Certified for full monthly invoice release.",
             "Napakaganda ng koneksyon (100% compliant). Umaabot sa 96.4 Mbps ang average download speed sa oras ng klase na may 0.0% packet loss. Awtorisado ang buong bayad sa buwanang billing.",
         ),
+        (
+            "102144", "Baguio City National High School", "CAR", "Cordillera Administrative Region", "DIV-BAGUIO", "Baguio City", "Baguio City",
+            16.4023, 120.5960, "ISP-PLDT", "PLDT Enterprise", "FIBER", 100.0, 100.0, 12000.00, "DCP-WIN-102144-01", "HEALTHY_COMPLIANT",
+            "Highland fiber trunk running smoothly at 94.8 Mbps. Compliant SLA.",
+            "Maayos ang takbo ng fiber sa Baguio City. 94.8 Mbps average.",
+        ),
+        (
+            "103401", "San Fernando Central School", "R03", "Region III (Central Luzon)", "DIV-PAMPANGA", "Pampanga", "San Fernando",
+            15.0286, 120.6896, "ISP-CNVRG", "Converge ICT", "FIBER", 100.0, 100.0, 11500.00, "DCP-WIN-103401-01", "CONGESTION_HIGH_JITTER",
+            "Midday peak congestion detected with 38ms jitter and 42 Mbps throughput.",
+            "Nakararanas ng pagsisikip tuwing tanghali na may 38ms jitter at 42 Mbps speed.",
+        ),
+        (
+            "105219", "Legazpi City National High School", "R05", "Region V (Bicol Region)", "DIV-ALBAY", "Albay", "Legazpi City",
+            13.1391, 123.7438, "ISP-GLOBE", "Globe Business", "FIBER", 100.0, 100.0, 12000.00, "DCP-WIN-105219-01", "CHRONIC_PACKET_LOSS",
+            "Chronic packet loss (12.5%) detected on provincial uplink. Ticket dispatched to Globe.",
+            "Mataas na packet loss (12.5%) sa provincial link. Nagpadala na ng tiket sa Globe.",
+        ),
+        (
+            "107330", "Cebu City National Science High School", "R07", "Region VII (Central Visayas)", "DIV-CEBU", "Cebu City", "Cebu City",
+            10.3157, 123.8854, "ISP-CNVRG", "Converge ICT", "FIBER", 100.0, 100.0, 11500.00, "DCP-WIN-107330-01", "HEALTHY_COMPLIANT",
+            "Compliant Metro Cebu fiber node delivering 95.6 Mbps.",
+            "Maayos ang takbo ng fiber sa Cebu City na may 95.6 Mbps.",
+        ),
+        (
+            "108912", "Zamboanga City High School (Main)", "R09", "Region IX (Zamboanga Peninsula)", "DIV-ZAMBOANGA", "Zamboanga City", "Zamboanga City",
+            6.9214, 122.0790, "ISP-PLDT", "PLDT Enterprise", "FIBER", 100.0, 100.0, 12000.00, "DCP-WIN-108912-01", "SLA_BREACH_UNDERDELIVERY",
+            "Chronic under-delivery: ISP delivers only 28.5 Mbps on 100 Mbps contract. Breach penalty queued.",
+            "Mabagal ang bigay ng ISP (28.5 Mbps lang sa 100 Mbps kontrata). Nakapila para sa multa.",
+        ),
+        (
+            "110452", "Davao City National High School", "R11", "Region XI (Davao Region)", "DIV-DAVAO", "Davao City", "Davao City",
+            7.0736, 125.6128, "ISP-GLOBE", "Globe Business", "FIBER", 100.0, 100.0, 12000.00, "DCP-WIN-110452-01", "HEALTHY_COMPLIANT",
+            "Mindanao regional hub fiber delivering 96.1 Mbps. Compliant SLA.",
+            "Maayos at mabilis ang takbo sa Davao City (96.1 Mbps).",
+        ),
     ]
-    cur.executemany("INSERT INTO schools VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", schools_data)
+    cur.executemany("INSERT INTO schools VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", schools_data)
 
     # Seed 5 Days of Hourly School-Hour Telemetry (07:00 AM - 05:00 PM PHT)
     base_date = date.today() - timedelta(days=5)
@@ -324,7 +339,6 @@ def seed_prototype_data(conn):
 
     for day_offset in range(5):
         test_day = base_date + timedelta(days=day_offset)
-        # Skip Saturday/Sunday if any
         if test_day.weekday() in (5, 6):
             continue
         date_str = test_day.isoformat()
@@ -332,58 +346,83 @@ def seed_prototype_data(conn):
         for hour in range(7, 18):  # 7 AM to 5 PM
             dt_iso = f"{date_str}T{hour:02d}:15:00Z"
 
-            # 1. School 104512 (Selective Throttling between 10 AM and 2 PM)
-            is_peak = 10 <= hour <= 14
-            anchor_dl = 14.2 if is_peak else 92.5
-            public_dl = 95.8
-            is_sel = 1 if is_peak else 0
-            cat_1 = "ISP_SELECTIVE_THROTTLING" if is_peak else "HEALTHY_COMPLIANT"
-            measurements.append((
-                f"EVT-104512-{date_str}-{hour:02d}",
-                "104512", dt_iso, date_str, hour, "ONLINE", "ETHERNET", 0, 1, 1.25, 1,
-                anchor_dl, anchor_dl * 0.7, 32.4, 4.2, 0.0, public_dl, (anchor_dl / 100.0) * 100,
-                is_sel, cat_1, is_sel, 0, "sig-mock-104512"
-            ))
+            for s in schools_data:
+                s_id = s[0]
+                archetype = s[16]
+                contracted_dl = s[12]
 
-            # 2. School 109821 (Weak Wi-Fi on Admin PC)
-            measurements.append((
-                f"EVT-109821-{date_str}-{hour:02d}",
-                "109821", dt_iso, date_str, hour, "ONLINE", "WIFI", -86, 1, 98.4, 0,
-                11.8, 8.4, 112.5, 45.2, 8.5, 12.1, 11.8,
-                0, "LOCAL_WIFI_BOTTLENECK_EXEMPT", 0, 0, "sig-mock-109821"
-            ))
-
-            # 3. School 121405 (Day 4 & 5 Fiber Outage)
-            is_cut = (day_offset >= 3)
-            stat_3 = "VERIFIED_WAN_OFFLINE" if is_cut else "ONLINE"
-            dl_3 = 0.0 if is_cut else 91.2
-            cat_3 = "VERIFIED_ISP_WAN_OFFLINE" if is_cut else "HEALTHY_COMPLIANT"
-            measurements.append((
-                f"EVT-121405-{date_str}-{hour:02d}",
-                "121405", dt_iso, date_str, hour, stat_3, "ETHERNET", 0, 1, 1.4, 1,
-                dl_3, dl_3 * 0.7, 0.0 if is_cut else 28.5, 0.0 if is_cut else 3.8, 100.0 if is_cut else 0.0,
-                dl_3, 0.0 if is_cut else 91.2,
-                0, cat_3, 1 if is_cut else 0, 1 if is_cut else 0, "sig-mock-121405"
-            ))
-
-            # 4. School 139501 (Starlink Satellite with occasional rain fade)
-            is_rain = (hour in (13, 14))
-            dl_4 = 18.5 if is_rain else 46.2
-            measurements.append((
-                f"EVT-139501-{date_str}-{hour:02d}",
-                "139501", dt_iso, date_str, hour, "ONLINE", "ETHERNET", 0, 1, 2.1, 1,
-                dl_4, dl_4 * 0.4, 640.0 if is_rain else 85.0, 95.0 if is_rain else 18.5, 8.5 if is_rain else 0.0,
-                dl_4 * 1.05, (dl_4 / 50.0) * 100,
-                0, "RURAL_SATELLITE_WEATHER" if is_rain else "HEALTHY_COMPLIANT", 0, 0, "sig-mock-139501"
-            ))
-
-            # 5. School 112804 (100% Compliant Benchmark)
-            measurements.append((
-                f"EVT-112804-{date_str}-{hour:02d}",
-                "112804", dt_iso, date_str, hour, "ONLINE", "ETHERNET", 0, 1, 1.1, 1,
-                96.4, 88.2, 18.2, 1.8, 0.0, 97.1, 96.4,
-                0, "HEALTHY_COMPLIANT", 0, 0, "sig-mock-112804"
-            ))
+                if archetype == "ISP_SELECTIVE_THROTTLING":
+                    is_peak = 10 <= hour <= 14
+                    anchor_dl = 14.2 if is_peak else 92.5
+                    public_dl = 95.8
+                    is_sel = 1 if is_peak else 0
+                    cat = "ISP_SELECTIVE_THROTTLING" if is_peak else "HEALTHY_COMPLIANT"
+                    measurements.append((
+                        f"EVT-{s_id}-{date_str}-{hour:02d}", s_id, dt_iso, date_str, hour,
+                        "ONLINE", "ETHERNET", 0, 1, 1.25, 1,
+                        anchor_dl, anchor_dl * 0.7, 32.4, 4.2, 0.0, public_dl, (anchor_dl / contracted_dl) * 100,
+                        is_sel, cat, is_sel, 0, f"sig-mock-{s_id}"
+                    ))
+                elif archetype == "LOCAL_WIFI_BOTTLENECK":
+                    measurements.append((
+                        f"EVT-{s_id}-{date_str}-{hour:02d}", s_id, dt_iso, date_str, hour,
+                        "ONLINE", "WIFI", -86, 1, 98.4, 0,
+                        11.8, 8.4, 112.5, 45.2, 8.5, 12.1, 11.8,
+                        0, "LOCAL_WIFI_BOTTLENECK_EXEMPT", 0, 0, f"sig-mock-{s_id}"
+                    ))
+                elif archetype == "REGIONAL_FIBER_CUT":
+                    is_cut = (day_offset >= 3)
+                    stat = "VERIFIED_WAN_OFFLINE" if is_cut else "ONLINE"
+                    dl = 0.0 if is_cut else 91.2
+                    cat = "VERIFIED_ISP_WAN_OFFLINE" if is_cut else "HEALTHY_COMPLIANT"
+                    measurements.append((
+                        f"EVT-{s_id}-{date_str}-{hour:02d}", s_id, dt_iso, date_str, hour,
+                        stat, "ETHERNET", 0, 1, 1.4, 1,
+                        dl, dl * 0.7, 0.0 if is_cut else 28.5, 0.0 if is_cut else 3.8, 100.0 if is_cut else 0.0,
+                        dl, 0.0 if is_cut else 91.2,
+                        0, cat, 1 if is_cut else 0, 1 if is_cut else 0, f"sig-mock-{s_id}"
+                    ))
+                elif archetype == "RURAL_SATELLITE_WEATHER":
+                    is_rain = (hour in (13, 14))
+                    dl = 18.5 if is_rain else 46.2
+                    measurements.append((
+                        f"EVT-{s_id}-{date_str}-{hour:02d}", s_id, dt_iso, date_str, hour,
+                        "ONLINE", "ETHERNET", 0, 1, 2.1, 1,
+                        dl, dl * 0.4, 640.0 if is_rain else 85.0, 95.0 if is_rain else 18.5, 8.5 if is_rain else 0.0,
+                        dl * 1.05, (dl / contracted_dl) * 100,
+                        0, "RURAL_SATELLITE_WEATHER" if is_rain else "HEALTHY_COMPLIANT", 0, 0, f"sig-mock-{s_id}"
+                    ))
+                elif archetype == "CONGESTION_HIGH_JITTER":
+                    is_midday = (11 <= hour <= 13)
+                    dl = 42.0 if is_midday else 88.5
+                    measurements.append((
+                        f"EVT-{s_id}-{date_str}-{hour:02d}", s_id, dt_iso, date_str, hour,
+                        "ONLINE", "ETHERNET", 0, 1, 1.3, 1,
+                        dl, dl * 0.6, 52.0 if is_midday else 22.0, 38.0 if is_midday else 4.0, 2.0 if is_midday else 0.0,
+                        dl, (dl / contracted_dl) * 100,
+                        0, "MIDDAY_CONGESTION" if is_midday else "HEALTHY_COMPLIANT", 1 if is_midday else 0, 0, f"sig-mock-{s_id}"
+                    ))
+                elif archetype == "CHRONIC_PACKET_LOSS":
+                    measurements.append((
+                        f"EVT-{s_id}-{date_str}-{hour:02d}", s_id, dt_iso, date_str, hour,
+                        "ONLINE", "ETHERNET", 0, 1, 1.2, 1,
+                        34.0, 22.0, 75.0, 18.0, 12.5, 35.0, 34.0,
+                        0, "CHRONIC_PACKET_LOSS", 1, 0, f"sig-mock-{s_id}"
+                    ))
+                elif archetype == "SLA_BREACH_UNDERDELIVERY":
+                    measurements.append((
+                        f"EVT-{s_id}-{date_str}-{hour:02d}", s_id, dt_iso, date_str, hour,
+                        "ONLINE", "ETHERNET", 0, 1, 1.2, 1,
+                        28.5, 18.0, 68.0, 12.0, 3.5, 29.0, 28.5,
+                        0, "SLA_BREACH_UNDERDELIVERY", 1, 0, f"sig-mock-{s_id}"
+                    ))
+                else:  # HEALTHY_COMPLIANT
+                    measurements.append((
+                        f"EVT-{s_id}-{date_str}-{hour:02d}", s_id, dt_iso, date_str, hour,
+                        "ONLINE", "ETHERNET", 0, 1, 1.1, 1,
+                        96.4, 88.2, 18.2, 1.8, 0.0, 97.1, 96.4,
+                        0, "HEALTHY_COMPLIANT", 0, 0, f"sig-mock-{s_id}"
+                    ))
 
     cur.executemany("INSERT INTO measurements VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", measurements)
 

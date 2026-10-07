@@ -6,9 +6,18 @@ let nlChartInstance = null;
 let activeSchoolId = "104512";
 let activeMemoViolationId = null;
 
+// Geospatial Map State
+let phMap = null;
+let mapHeatLayer = null;
+let mapMarkersLayer = null;
+let mapDataFeatures = [];
+let activeMapFilter = "ALL";
+let activeMapLayerMode = "heat"; // 'heat' or 'pins'
+
 document.addEventListener("DOMContentLoaded", () => {
   initTabs();
   initRoleSwitcher();
+  initMap();
   loadNationalSummary();
   loadDivisionWatchlist();
   loadSchoolPortal(activeSchoolId);
@@ -30,6 +39,10 @@ function initTabs() {
       btn.classList.add("active");
       const targetId = btn.getAttribute("data-tab");
       document.getElementById(targetId).classList.remove("hidden");
+
+      if (targetId === "tab1" && phMap) {
+        setTimeout(() => phMap.invalidateSize(), 200);
+      }
 
       if (targetId === "tab3" && dualProbeChartInstance) {
         dualProbeChartInstance.resize();
@@ -62,6 +75,223 @@ function showToast(msg) {
   document.getElementById("toastMessage").innerText = msg;
   toast.style.display = "block";
   setTimeout(() => { toast.style.display = "none"; }, 3500);
+}
+
+// ==================== GEOSPATIAL MAP & CONNECTIVITY HEATMAP ====================
+function initMap() {
+  if (phMap) return;
+
+  const mapEl = document.getElementById("phConnectivityMap");
+  if (!mapEl) return;
+
+  // Center on Philippines Archipelago: [12.8797, 121.7740], zoom 6
+  phMap = L.map("phConnectivityMap", {
+    zoomControl: true,
+    scrollWheelZoom: false,
+    minZoom: 5,
+    maxZoom: 18,
+  }).setView([12.8797, 121.7740], 6);
+
+  // CartoDB Dark Matter tiles
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: "abcd",
+    maxZoom: 19,
+  }).addTo(phMap);
+
+  mapMarkersLayer = L.layerGroup().addTo(phMap);
+
+  // Map Filter Buttons
+  const filterBtns = document.querySelectorAll(".map-filter-btn");
+  filterBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      filterBtns.forEach(b => {
+        b.classList.remove("bg-blue-600", "text-white", "active");
+        b.classList.add("text-slate-300");
+      });
+      btn.classList.remove("text-slate-300");
+      btn.classList.add("bg-blue-600", "text-white", "active");
+      activeMapFilter = btn.getAttribute("data-issue");
+      loadMapData();
+    });
+  });
+
+  // Layer Mode Toggles
+  const btnHeat = document.getElementById("btnLayerHeat");
+  const btnPins = document.getElementById("btnLayerPins");
+
+  if (btnHeat && btnPins) {
+    btnHeat.addEventListener("click", () => {
+      activeMapLayerMode = "heat";
+      btnHeat.className = "px-2.5 py-1 rounded text-xs font-semibold bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 flex items-center gap-1";
+      btnPins.className = "px-2.5 py-1 rounded text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-1";
+      renderMapLayers();
+      showToast("Switched to Heat Density Cloud view");
+    });
+
+    btnPins.addEventListener("click", () => {
+      activeMapLayerMode = "pins";
+      btnPins.className = "px-2.5 py-1 rounded text-xs font-semibold bg-sky-500/20 text-sky-400 border border-sky-500/30 flex items-center gap-1";
+      btnHeat.className = "px-2.5 py-1 rounded text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-1";
+      renderMapLayers();
+      showToast("Switched to Individual School Pins & Diagnostics view");
+    });
+  }
+
+  loadMapData();
+}
+
+async function loadMapData() {
+  try {
+    const url = `/api/v1/schools/map-issues?issue_type=${activeMapFilter}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    mapDataFeatures = data.features || [];
+
+    const visibleEl = document.getElementById("mapVisibleCount");
+    if (visibleEl) visibleEl.innerText = data.filtered_count;
+
+    renderMapLayers();
+  } catch (err) {
+    console.error("Error loading map issues data:", err);
+  }
+}
+
+function renderMapLayers() {
+  if (!phMap) return;
+
+  // Clear existing layers
+  if (mapHeatLayer) {
+    phMap.removeLayer(mapHeatLayer);
+    mapHeatLayer = null;
+  }
+  mapMarkersLayer.clearLayers();
+
+  if (activeMapLayerMode === "heat") {
+    // Generate weighted heat points: [lat, lng, intensity]
+    const heatPoints = mapDataFeatures
+      .filter(f => f.latitude && f.longitude)
+      .map(f => [f.latitude, f.longitude, f.heat_weight || 0.5]);
+
+    if (heatPoints.length > 0 && typeof L.heatLayer === "function") {
+      mapHeatLayer = L.heatLayer(heatPoints, {
+        radius: 35,
+        blur: 25,
+        maxZoom: 12,
+        minOpacity: 0.35,
+        gradient: {
+          0.2: "#38bdf8", // Cyan (Weather)
+          0.4: "#facc15", // Yellow (Wi-Fi)
+          0.7: "#f97316", // Orange (Throttling)
+          1.0: "#ef4444"  // Red (Critical Outage)
+        }
+      }).addTo(phMap);
+    }
+
+    // In heat mode, also add subtle clickable circle markers for schools with issues
+    mapDataFeatures.forEach(feat => {
+      if (!feat.latitude || !feat.longitude) return;
+
+      const marker = L.circleMarker([feat.latitude, feat.longitude], {
+        radius: feat.severity === "CRITICAL" ? 9 : 7,
+        fillColor: feat.badge_color,
+        color: "#FFFFFF",
+        weight: 1.5,
+        opacity: 0.9,
+        fillOpacity: 0.85,
+        className: feat.severity === "CRITICAL" ? "pulse-marker-critical" : "",
+      });
+
+      marker.bindPopup(buildSchoolPopupHtml(feat), { maxWidth: 320 });
+      mapMarkersLayer.addLayer(marker);
+    });
+
+  } else {
+    // Pins mode: high-contrast markers with tooltips and popups
+    mapDataFeatures.forEach(feat => {
+      if (!feat.latitude || !feat.longitude) return;
+
+      const isCritical = feat.severity === "CRITICAL";
+      const marker = L.circleMarker([feat.latitude, feat.longitude], {
+        radius: isCritical ? 10 : 8,
+        fillColor: feat.badge_color,
+        color: isCritical ? "#FECACA" : "#FFFFFF",
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0.9,
+        className: isCritical ? "pulse-marker-critical" : "",
+      });
+
+      marker.bindTooltip(`<strong>${feat.school_name}</strong><br><span style="color:${feat.badge_color}">${feat.issue_label}</span>`, {
+        direction: "top",
+        offset: [0, -8],
+        className: "bg-slate-900 text-slate-100 border border-slate-700 text-xs px-2 py-1 rounded shadow"
+      });
+
+      marker.bindPopup(buildSchoolPopupHtml(feat), { maxWidth: 320 });
+      mapMarkersLayer.addLayer(marker);
+    });
+  }
+}
+
+function buildSchoolPopupHtml(feat) {
+  const speedColor = feat.measured_dl_mbps < 50 ? "text-red-400 font-bold" : "text-emerald-400 font-bold";
+
+  return `
+    <div class="p-3 text-xs bg-slate-900 text-slate-100 rounded-lg min-w-[260px] border border-slate-700">
+      <div class="flex items-start justify-between gap-2 border-b border-slate-700 pb-2 mb-2">
+        <div>
+          <div class="font-bold text-white text-sm">${feat.school_name}</div>
+          <div class="text-[11px] text-slate-400">${feat.division_name} &bull; ${feat.region_id}</div>
+        </div>
+        <span class="text-[10px] px-1.5 py-0.5 rounded font-mono font-bold whitespace-nowrap" style="background:${feat.badge_color}22; color:${feat.badge_color}; border: 1px solid ${feat.badge_color}">
+          ${feat.severity}
+        </span>
+      </div>
+
+      <div class="space-y-1.5 text-slate-300">
+        <div class="flex justify-between">
+          <span class="text-slate-400">BEIS School ID:</span>
+          <span class="font-mono text-white">${feat.school_id}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-400">Assigned Provider:</span>
+          <span class="font-semibold text-yellow-400">${feat.isp_name}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-400">Speed (Actual / CIR):</span>
+          <span class="font-mono ${speedColor}">${feat.measured_dl_mbps} / ${feat.contracted_dl_mbps} Mbps</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-400">Contract Compliance:</span>
+          <span class="font-mono ${feat.compliance_pct < 70 ? 'text-red-400' : 'text-emerald-400'}">${feat.compliance_pct}%</span>
+        </div>
+        <div class="pt-1 border-t border-slate-800">
+          <div class="text-slate-400 text-[10px]">Diagnostic Category:</div>
+          <div class="font-semibold text-slate-200 mt-0.5">${feat.issue_label}</div>
+        </div>
+        ${feat.is_selective_throttling ? '<div class="text-[10px] text-red-300 bg-red-950/60 p-1.5 rounded border border-red-800">🚨 Public speedtest shows ' + feat.public_dl_mbps + ' Mbps while DepEd Cloud is throttled.</div>' : ''}
+      </div>
+
+      <div class="mt-3 pt-2 border-t border-slate-700 flex justify-end">
+        <button onclick="selectSchool('${feat.school_id}')" class="px-2.5 py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-white font-semibold text-[11px] flex items-center gap-1.5 transition shadow">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Open School Portal ($0 BI)
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function zoomToHotspot(lat, lng, zoom, regionId) {
+  if (!phMap) return;
+  phMap.setView([lat, lng], zoom);
+  showToast(`Zoomed map to ${regionId} Hotspot Cluster`);
+}
+
+function resetMapView() {
+  if (!phMap) return;
+  phMap.setView([12.8797, 121.7740], 6);
+  showToast("Reset map to National Archipelago view");
 }
 
 // Tab 1: Load National Summary & 17 Regions

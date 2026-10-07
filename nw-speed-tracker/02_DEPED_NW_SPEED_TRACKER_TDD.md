@@ -742,12 +742,51 @@ OPTIONS (
 );
 ```
 
+#### 6.1 BigQuery GIS Schema & Spatial Clustering (`ST_CLUSTERDBSCAN`)
+To support the **Nationwide School Connectivity Heatmap** across 47,000 schools without spatial performance degradation:
+1. **GEOGRAPHY Point Storage:** The master registry and time-series tables maintain `school_geom GEOGRAPHY` generated via `ST_GEOGPOINT(longitude, latitude)`.
+2. **Spatial Density & Fiber Cut Cluster Detection:** Unsupervised spatial clustering runs every 10 minutes to group co-located schools experiencing simultaneous outages into a single Master Incident Ticket:
+
+```sql
+-- Automated Regional Cluster Outage Detection Query (ST_CLUSTERDBSCAN)
+-- Identifies >= 10 schools within a 25 km radius simultaneously reporting VERIFIED_WAN_OFFLINE
+WITH offline_schools AS (
+    SELECT 
+        s.school_id, s.school_name, s.region_id, s.division_id, s.isp_name,
+        s.school_geom, m.measured_at
+    FROM `deped-netpulse-prod.telemetry.speedtest_measurements` m
+    JOIN `deped-netpulse-prod.registry.schools_master` s ON m.school_id = s.school_id
+    WHERE m.measured_at >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 15 MINUTE)
+      AND m.connection_status = 'VERIFIED_WAN_OFFLINE'
+      AND m.local_gateway_reachable = TRUE
+)
+SELECT 
+    cluster_id,
+    region_id,
+    division_id,
+    isp_name,
+    COUNT(*) AS affected_schools_count,
+    ST_CENTROID(ST_UNION_AGG(school_geom)) AS incident_epicenter,
+    ARRAY_AGG(school_name LIMIT 5) AS sample_affected_schools
+FROM (
+    SELECT 
+        *,
+        ST_CLUSTERDBSCAN(school_geom, 25000, 10) OVER() AS cluster_id
+    FROM offline_schools
+)
+WHERE cluster_id IS NOT NULL
+GROUP BY cluster_id, region_id, division_id, isp_name
+HAVING affected_schools_count >= 10;
+```
+
 ---
 
 ### 7. Hybrid 3-Tier UI: Looker Semantic Layer & Cost-Guarded Cloud Run School Portal
 
 #### 7.1 Tier 1 (Central Office) & Tier 2 (17 Regions / 220+ Divisions): Looker + Gemini Enterprise
 - Connects directly to the **Date-Partitioned Materialized View (`mv_school_daily_rollups`)** and **`sla_violation_ledger`** with `always_filter: { filters: [test_date: "30 days"] }` so every dashboard load and every **Conversational Analytics** query in English or Tagalog automatically includes the partition predicate `WHERE test_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)`.
+- **Looker GIS Google Maps Layer & Heatmap Density Cloud:** Serves national and regional heatmaps powered by BigQuery GIS coordinates. Central Office executives can toggle between **Heat Density Cloud** (regional CIR deficit intensity) and **School Pins** (color-coded by diagnostic status: 🔴 Outage, 🟠 Throttling, 🟡 Wi-Fi Exempt, 🔵 Weather, 🟢 Compliant).
+- **Public & Executive Zero-License Mode:** Integrates lightweight Leaflet / CartoDB Dark Matter tile embedding for public transparency and division superintendents without requiring per-seat Looker licenses.
 
 #### 7.2 Tier 3 (47,000 School Principals): Cost-Guarded Cloud Run School Web Portal
 - **Zero Per-Seat BI License Cost:** Principals sign in with their `@deped.gov.ph` Google Workspace account via **Cloud Identity-Aware Proxy (IAP) / OIDC**.
