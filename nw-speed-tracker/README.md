@@ -40,3 +40,53 @@ This solution combines a **Zero-Hardware-CapEx Go static binary service on exist
 4. **Gemini 3.8 Flash & Gemini 3.1 Pro Operationalization:**
    - **`Gemini 3.8 Flash`:** Powers event-driven bilingual (English & Tagalog) Grounded Root-Cause Diagnostic cards, Tier 3 School Portal Q&A, and synthetic scenario generation.
    - **`Gemini 3.1 Pro`:** Powers the **Autonomous ISP SLA Auditor Agent** and COA-ready Rebate Dispute Memo generator, governed by **Zero-Touch Technical Ticketing** (ITSM + Google Workspace Gmail/Chat) and a **Human-in-the-Loop (HITL) Financial Rebate Approval State Machine**.
+
+---
+
+## 🌐 Live Prototype Demo & Cloud Run Deployment
+
+An interactive, full-stack demonstration prototype is deployed and running on Google Cloud Platform:
+
+| Property | Details |
+| :--- | :--- |
+| **GCP Project** | `deped-demos-01` |
+| **GCP Region** | `asia-southeast1` (Singapore) |
+| **Cloud Run Service** | `deped-netpulse-demo` |
+| **Live Service URL** | [`https://deped-netpulse-demo-948357328216.asia-southeast1.run.app`](https://deped-netpulse-demo-948357328216.asia-southeast1.run.app) |
+| **Source Directory** | [`demo-app/`](./demo-app/) |
+| **AI Models Active** | `gemini-3.8-flash` (Conversational Analytics & Diagnostics) + `gemini-3.1-pro` (ISP SLA Auditor) |
+| **Pre-Seeded Data** | **47,000 public schools** across **17 Philippine administrative regions**, 5 major ISPs (PLDT, Globe, Converge, DITO, Starlink), and 5 days of hourly school-hours telemetry. |
+
+### How to Access the Live Demo
+
+Because the Cloud Run service is secured within the Google Cloud organization policy of `deped-demos-01`, access the live web application using either of the following methods:
+
+#### Option A: Direct Web Browser Access (Authorized Google Account)
+Open [`https://deped-netpulse-demo-948357328216.asia-southeast1.run.app`](https://deped-netpulse-demo-948357328216.asia-southeast1.run.app) in your browser while signed into your authorized Google account (`admin@markea.altostrat.com` or authorized domain member).
+
+#### Option B: Cloud Run Services Proxy (Local Port-Forwarding)
+Run the `gcloud run services proxy` command in your terminal to create an authenticated local tunnel:
+```bash
+gcloud run services proxy deped-netpulse-demo \
+  --region=asia-southeast1 \
+  --project=deped-demos-01 \
+  --port=8080
+```
+Then navigate to:
+```
+http://localhost:8080
+```
+
+#### Option C: Run Locally (Standalone Container / Python Script)
+You can also launch the full prototype locally in one command:
+```bash
+cd demo-app
+./run_demo.sh
+```
+Or with Docker:
+```bash
+cd demo-app
+docker build -t deped-netpulse-demo .
+docker run -p 8080:8080 -e DEMO_ENV=LOCAL deped-netpulse-demo
+```
+
