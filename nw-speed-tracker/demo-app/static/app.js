@@ -15,19 +15,20 @@ let mapDataFeatures = [];
 let activeMapFilter = "ALL";
 let activeMapLayerMode = "heat"; // 'heat' or 'pins'
 
-// Dark theme map styles for Google Maps
-const GOOGLE_MAPS_DARK_STYLE = [
-  { elementType: "geometry", stylers: [{ color: "#0B1120" }] },
-  { elementType: "labels.text.fill", stylers: [{ color: "#94A3B8" }] },
-  { elementType: "labels.text.stroke", stylers: [{ color: "#0F172A" }] },
-  { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [{ color: "#334155" }, { weight: 1.5 }] },
-  { featureType: "administrative.province", elementType: "geometry.stroke", stylers: [{ color: "#1E293B" }, { weight: 1 }] },
-  { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#0F172A" }] },
-  { featureType: "poi", elementType: "geometry", stylers: [{ color: "#1E293B" }] },
-  { featureType: "road", elementType: "geometry", stylers: [{ color: "#1E293B" }] },
-  { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#334155" }] },
-  { featureType: "water", elementType: "geometry", stylers: [{ color: "#030712" }] },
-  { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#38BDF8" }] }
+// Executive Light theme map styles for Google Maps (DepEd Cartography)
+const GOOGLE_MAPS_LIGHT_STYLE = [
+  { elementType: "geometry", stylers: [{ color: "#F8FAFC" }] },
+  { elementType: "labels.text.fill", stylers: [{ color: "#334155" }] },
+  { elementType: "labels.text.stroke", stylers: [{ color: "#FFFFFF" }, { weight: 2 }] },
+  { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [{ color: "#0038A8" }, { weight: 1.5 }] },
+  { featureType: "administrative.province", elementType: "geometry.stroke", stylers: [{ color: "#94A3B8" }, { weight: 0.8 }] },
+  { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#F1F5F9" }] },
+  { featureType: "poi", elementType: "geometry", stylers: [{ color: "#E2E8F0" }] },
+  { featureType: "poi", elementType: "labels.text", stylers: [{ visibility: "off" }] },
+  { featureType: "road", elementType: "geometry", stylers: [{ color: "#FFFFFF" }] },
+  { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#CBD5E1" }] },
+  { featureType: "water", elementType: "geometry", stylers: [{ color: "#DCEEFE" }] },
+  { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#0284C7" }] }
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -139,7 +140,7 @@ function initMap() {
   phMap = new google.maps.Map(mapEl, {
     center: { lat: 12.8797, lng: 121.7740 },
     zoom: 6,
-    styles: GOOGLE_MAPS_DARK_STYLE,
+    styles: GOOGLE_MAPS_LIGHT_STYLE,
     mapTypeControl: true,
     mapTypeControlOptions: {
       style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
@@ -357,46 +358,46 @@ function renderMapLayers() {
 }
 
 function buildSchoolPopupHtml(feat) {
-  const speedColor = feat.measured_dl_mbps < 50 ? "text-red-400 font-bold" : "text-emerald-400 font-bold";
+  const speedColor = feat.measured_dl_mbps < 50 ? "text-red-600 font-bold" : "text-emerald-700 font-bold";
 
   return `
-    <div class="p-3 text-xs bg-slate-900 text-slate-100 rounded-lg min-w-[260px] border border-slate-700">
-      <div class="flex items-start justify-between gap-2 border-b border-slate-700 pb-2 mb-2">
+    <div class="p-3.5 text-xs bg-white text-slate-800 rounded-lg min-w-[280px] border border-slate-200 shadow-xl">
+      <div class="flex items-start justify-between gap-2 border-b border-slate-200 pb-2 mb-2">
         <div>
-          <div class="font-bold text-white text-sm">${feat.school_name}</div>
-          <div class="text-[11px] text-slate-400">${feat.division_name} &bull; ${feat.region_id}</div>
+          <div class="font-bold text-slate-900 text-sm">${feat.school_name}</div>
+          <div class="text-[11px] text-slate-500 font-medium">${feat.division_name} &bull; ${feat.region_id}</div>
         </div>
-        <span class="text-[10px] px-1.5 py-0.5 rounded font-mono font-bold whitespace-nowrap" style="background:${feat.badge_color}22; color:${feat.badge_color}; border: 1px solid ${feat.badge_color}">
+        <span class="text-[10px] px-1.5 py-0.5 rounded font-mono font-bold whitespace-nowrap" style="background:${feat.badge_color}18; color:${feat.badge_color}; border: 1px solid ${feat.badge_color}">
           ${feat.severity}
         </span>
       </div>
 
-      <div class="space-y-1.5 text-slate-300">
+      <div class="space-y-1.5 text-slate-600">
         <div class="flex justify-between">
-          <span class="text-slate-400">BEIS School ID:</span>
-          <span class="font-mono text-white">${feat.school_id}</span>
+          <span class="text-slate-500">BEIS School ID:</span>
+          <span class="font-mono font-semibold text-slate-900">${feat.school_id}</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-slate-400">Assigned Provider:</span>
-          <span class="font-semibold text-yellow-400">${feat.isp_name}</span>
+          <span class="text-slate-500">Assigned Provider:</span>
+          <span class="font-semibold text-[#0038A8]">${feat.isp_name}</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-slate-400">Speed (Actual / CIR):</span>
+          <span class="text-slate-500">Speed (Actual / CIR):</span>
           <span class="font-mono ${speedColor}">${feat.measured_dl_mbps} / ${feat.contracted_dl_mbps} Mbps</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-slate-400">Contract Compliance:</span>
-          <span class="font-mono ${feat.compliance_pct < 70 ? 'text-red-400' : 'text-emerald-400'}">${feat.compliance_pct}%</span>
+          <span class="text-slate-500">Contract Compliance:</span>
+          <span class="font-mono font-bold ${feat.compliance_pct < 70 ? 'text-red-600' : 'text-emerald-700'}">${feat.compliance_pct}%</span>
         </div>
-        <div class="pt-1 border-t border-slate-800">
-          <div class="text-slate-400 text-[10px]">Diagnostic Category:</div>
-          <div class="font-semibold text-slate-200 mt-0.5">${feat.issue_label}</div>
+        <div class="pt-1 border-t border-slate-100">
+          <div class="text-slate-400 text-[10px] font-semibold uppercase">Diagnostic Category:</div>
+          <div class="font-semibold text-slate-800 mt-0.5">${feat.issue_label}</div>
         </div>
-        ${feat.is_selective_throttling ? '<div class="text-[10px] text-red-300 bg-red-950/60 p-1.5 rounded border border-red-800">🚨 Public speedtest shows ' + feat.public_dl_mbps + ' Mbps while DepEd Cloud is throttled.</div>' : ''}
+        ${feat.is_selective_throttling ? '<div class="text-[10px] text-red-800 bg-red-50 p-1.5 rounded border border-red-200 font-medium">🚨 Public speedtest shows ' + feat.public_dl_mbps + ' Mbps while DepEd Cloud is throttled.</div>' : ''}
       </div>
 
-      <div class="mt-3 pt-2 border-t border-slate-700 flex justify-end">
-        <button onclick="selectSchool('${feat.school_id}')" class="px-2.5 py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-white font-semibold text-[11px] flex items-center gap-1.5 transition shadow cursor-pointer">
+      <div class="mt-3 pt-2 border-t border-slate-200 flex justify-end">
+        <button onclick="selectSchool('${feat.school_id}')" class="px-3 py-1.5 rounded bg-[#0038A8] hover:bg-[#002266] text-white font-semibold text-[11px] flex items-center gap-1.5 transition shadow-sm cursor-pointer">
           <i class="fa-solid fa-arrow-up-right-from-square"></i> Open School Portal ($0 BI)
         </button>
       </div>
@@ -438,17 +439,17 @@ async function loadNationalSummary() {
       else if (r.compliance_pct < 85) badgeClass = "badge-warning";
 
       return `
-        <div class="p-2.5 rounded-lg border border-slate-700 bg-slate-800/60 hover:border-yellow-400 transition cursor-pointer" onclick="filterByRegion('${r.region_id}')">
+        <div class="p-2.5 rounded-lg border border-slate-200 bg-white hover:border-[#0038A8] hover:shadow-md transition cursor-pointer" onclick="filterByRegion('${r.region_id}')">
           <div class="flex justify-between items-start">
-            <span class="font-bold text-xs text-white">${r.region_id}</span>
+            <span class="font-bold text-xs text-slate-900">${r.region_id}</span>
             <span class="text-[10px] px-1.5 py-0.5 rounded font-mono ${badgeClass}">${r.compliance_pct}%</span>
           </div>
-          <div class="text-[11px] text-slate-300 font-medium truncate mt-1">${r.region_name}</div>
-          <div class="flex justify-between items-center text-[10px] text-slate-400 mt-2">
+          <div class="text-[11px] text-slate-700 font-semibold truncate mt-1">${r.region_name}</div>
+          <div class="flex justify-between items-center text-[10px] text-slate-500 mt-2">
             <span>${r.online_schools.toLocaleString()} / ${r.total_schools.toLocaleString()} schools</span>
-            <span class="text-sky-400 font-mono">${r.avg_speed_mbps} Mbps</span>
+            <span class="text-[#0038A8] font-mono font-bold">${r.avg_speed_mbps} Mbps</span>
           </div>
-          ${r.active_cluster_outage ? '<div class="text-[9px] text-red-400 font-bold mt-1 animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Cluster Cut Active</div>' : ''}
+          ${r.active_cluster_outage ? '<div class="text-[9px] text-[#CE1126] font-bold mt-1 animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Cluster Cut Active</div>' : ''}
         </div>
       `;
     }).join("");
@@ -458,14 +459,14 @@ async function loadNationalSummary() {
     tbody.innerHTML = data.isps.map(isp => {
       const isThrottling = isp.selective_throttling_flag;
       return `
-        <tr class="hover:bg-slate-800/40">
-          <td class="py-2.5 font-medium text-white flex items-center gap-1.5">
+        <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+          <td class="py-2.5 font-semibold text-slate-800 flex items-center gap-1.5">
             ${isp.isp_name}
-            ${isThrottling ? '<span class="text-[9px] bg-red-950 text-red-400 border border-red-800 px-1.5 py-0.2 rounded font-bold">ANTI-GAMING FLAG</span>' : ''}
+            ${isThrottling ? '<span class="text-[9px] bg-red-100 text-red-800 border border-red-300 px-1.5 py-0.2 rounded font-bold">ANTI-GAMING FLAG</span>' : ''}
           </td>
-          <td class="py-2.5 text-center font-mono ${isp.deped_anchor_avg_pct < 50 ? 'text-red-400 font-bold' : 'text-emerald-400'}">${isp.deped_anchor_avg_pct}%</td>
-          <td class="py-2.5 text-center font-mono text-slate-300">${isp.public_ref_avg_pct}%</td>
-          <td class="py-2.5 text-right font-mono text-amber-400 font-bold">₱${isp.monthly_rebates_eligible_php.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+          <td class="py-2.5 text-center font-mono ${isp.deped_anchor_avg_pct < 50 ? 'text-[#CE1126] font-bold' : 'text-emerald-700 font-semibold'}">${isp.deped_anchor_avg_pct}%</td>
+          <td class="py-2.5 text-center font-mono text-slate-600">${isp.public_ref_avg_pct}%</td>
+          <td class="py-2.5 text-right font-mono text-[#CE1126] font-bold">₱${isp.monthly_rebates_eligible_php.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
         </tr>
       `;
     }).join("");
@@ -500,11 +501,11 @@ async function loadDivisionWatchlist() {
       }
 
       return `
-        <tr class="hover:bg-slate-800/40 cursor-pointer" onclick="selectSchool('${s.school_id}')">
-          <td class="py-2.5 font-bold text-white">${s.school_name} <br><span class="text-[10px] font-normal text-slate-400 font-mono">${s.school_id}</span></td>
-          <td class="py-2.5 text-slate-300">${s.division_name} <br><span class="text-[10px] text-slate-400">${s.region_id}</span></td>
-          <td class="py-2.5 text-slate-300 font-mono">${s.archetype === 'LOCAL_WIFI_BOTTLENECK' ? 'WIFI (-86 dBm)' : 'ETHERNET (1ms)'}</td>
-          <td class="py-2.5 font-mono ${s.contracted_dl_mbps < 50 ? 'text-amber-400' : 'text-emerald-400'}">${s.contracted_dl_mbps} Mbps</td>
+        <tr class="hover:bg-slate-50 cursor-pointer border-b border-slate-100 transition" onclick="selectSchool('${s.school_id}')">
+          <td class="py-2.5 font-bold text-slate-900">${s.school_name} <br><span class="text-[10px] font-normal text-slate-500 font-mono">${s.school_id}</span></td>
+          <td class="py-2.5 text-slate-700">${s.division_name} <br><span class="text-[10px] text-slate-500 font-semibold">${s.region_id}</span></td>
+          <td class="py-2.5 text-slate-700 font-mono text-[11px]">${s.archetype === 'LOCAL_WIFI_BOTTLENECK' ? 'WIFI (-86 dBm)' : 'ETHERNET (1ms)'}</td>
+          <td class="py-2.5 font-mono font-bold ${s.contracted_dl_mbps < 50 ? 'text-amber-600' : 'text-emerald-700'}">${s.contracted_dl_mbps} Mbps</td>
           <td class="py-2.5">${badge}</td>
         </tr>
       `;
@@ -638,7 +639,7 @@ function renderDualProbeChart(records, contractedSpeed) {
       maintainAspectRatio: false,
       interaction: { mode: "index", intersect: false },
       plugins: {
-        legend: { labels: { color: "#CBD5E1", font: { size: 11 } } },
+        legend: { labels: { color: "#334155", font: { size: 11, weight: "bold" } } },
         tooltip: {
           callbacks: {
             footer: (items) => {
@@ -649,8 +650,8 @@ function renderDualProbeChart(records, contractedSpeed) {
         }
       },
       scales: {
-        x: { ticks: { color: "#94A3B8", maxTicksLimit: 10 }, grid: { color: "rgba(255,255,255,0.05)" } },
-        y: { ticks: { color: "#94A3B8" }, grid: { color: "rgba(255,255,255,0.08)" }, title: { display: true, text: "Mbps", color: "#94A3B8" } }
+        x: { ticks: { color: "#475569", maxTicksLimit: 10 }, grid: { color: "rgba(0,0,0,0.06)" } },
+        y: { ticks: { color: "#475569" }, grid: { color: "rgba(0,0,0,0.08)" }, title: { display: true, text: "Mbps", color: "#334155" } }
       }
     }
   });
@@ -711,10 +712,10 @@ function renderNLChart(chartData) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { labels: { color: "#CBD5E1" } } },
+      plugins: { legend: { labels: { color: "#334155", font: { weight: "bold" } } } },
       scales: {
-        x: { ticks: { color: "#94A3B8" }, grid: { display: false } },
-        y: { ticks: { color: "#94A3B8" }, grid: { color: "rgba(255,255,255,0.05)" } }
+        x: { ticks: { color: "#475569" }, grid: { display: false } },
+        y: { ticks: { color: "#475569" }, grid: { color: "rgba(0,0,0,0.06)" } }
       }
     }
   });
@@ -728,16 +729,16 @@ async function loadGovernanceDashboard() {
     // Zero-Touch Technical Tickets Feed
     const feed = document.getElementById("zeroTouchFeed");
     feed.innerHTML = data.zero_touch_tickets.map(t => `
-      <div class="p-3 bg-slate-900 border border-slate-800 rounded-lg space-y-2">
+      <div class="p-3 bg-white border border-slate-200 rounded-lg space-y-1.5 shadow-sm">
         <div class="flex justify-between items-start">
-          <span class="font-bold text-xs text-white">${t.title}</span>
-          <span class="text-[9px] bg-red-950 text-red-400 border border-red-800 px-1.5 py-0.5 rounded font-mono font-bold">${t.severity}</span>
+          <span class="font-bold text-xs text-slate-900">${t.title}</span>
+          <span class="text-[9px] bg-red-100 text-red-800 border border-red-300 px-1.5 py-0.5 rounded font-mono font-bold">${t.severity}</span>
         </div>
-        <div class="text-[11px] text-slate-300">${t.description}</div>
-        <div class="text-[10px] text-purple-300 font-medium">${t.gemini_diagnosis}</div>
-        <div class="flex justify-between items-center text-[9px] text-slate-400 pt-1 border-t border-slate-800/60">
-          <span>Ticket: <strong class="text-white">${t.ticket_id}</strong></span>
-          <span class="text-emerald-400"><i class="fa-solid fa-paper-plane mr-1"></i> Dispatched to Gmail & Google Chat</span>
+        <div class="text-[11px] text-slate-600">${t.description}</div>
+        <div class="text-[10px] text-purple-700 font-medium">${t.gemini_diagnosis}</div>
+        <div class="flex justify-between items-center text-[9px] text-slate-500 pt-1 border-t border-slate-100">
+          <span>Ticket: <strong class="text-slate-800 font-mono">${t.ticket_id}</strong></span>
+          <span class="text-emerald-700 font-semibold"><i class="fa-solid fa-paper-plane mr-1"></i> Dispatched to Gmail & Chat</span>
         </div>
       </div>
     `).join("");
@@ -747,22 +748,22 @@ async function loadGovernanceDashboard() {
     queue.innerHTML = data.hitl_rebate_queue.map(v => {
       const isApproved = v.hitl_approval_state === "APPROVED_FOR_REBATE";
       return `
-        <div class="p-3 bg-slate-900 border ${isApproved ? 'border-emerald-800/80 bg-emerald-950/10' : 'border-amber-800/60'} rounded-lg space-y-2.5">
+        <div class="p-3 bg-white border ${isApproved ? 'border-emerald-300 bg-emerald-50/40' : 'border-amber-300 bg-amber-50/20'} rounded-lg space-y-2 shadow-sm">
           <div class="flex justify-between items-start">
             <div>
-              <div class="font-bold text-xs text-white">${v.school_name} (${v.school_id})</div>
-              <div class="text-[10px] text-slate-400">ISP: ${v.isp_name} | Breach: ${v.consecutive_breach_days} Consecutive Days</div>
+              <div class="font-bold text-xs text-slate-900">${v.school_name} (${v.school_id})</div>
+              <div class="text-[10px] text-slate-500">ISP: <strong>${v.isp_name}</strong> | Breach: <strong>${v.consecutive_breach_days} Consecutive Days</strong></div>
             </div>
-            <span class="text-xs font-mono font-black text-amber-400">₱${v.calculated_rebate_php.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+            <span class="text-xs font-mono font-black text-[#CE1126]">₱${v.calculated_rebate_php.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
           </div>
-          <p class="text-[11px] text-slate-300 leading-snug">${v.gemini_diagnostic_en}</p>
-          <div class="flex justify-between items-center pt-1.5 border-t border-slate-800/60 text-xs">
-            <button class="text-sky-400 hover:text-sky-300 text-[11px] font-semibold" onclick="inspectMemo('${v.violation_id}')">
+          <p class="text-[11px] text-slate-700 leading-snug">${v.gemini_diagnostic_en}</p>
+          <div class="flex justify-between items-center pt-1.5 border-t border-slate-100 text-xs">
+            <button class="text-[#0038A8] hover:underline text-[11px] font-semibold" onclick="inspectMemo('${v.violation_id}')">
               <i class="fa-solid fa-file-lines mr-1"></i> Inspect COA Memo
             </button>
             ${isApproved ? 
-              `<span class="text-emerald-400 text-[11px] font-bold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Approved by ${v.approved_by_human_email}</span>` : 
-              `<button class="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-3 py-1 rounded text-[11px] transition shadow" onclick="approveRebate('${v.violation_id}')">
+              `<span class="text-emerald-700 text-[11px] font-bold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Approved by ${v.approved_by_human_email}</span>` : 
+              `<button class="bg-[#CE1126] hover:bg-red-700 text-white font-bold px-3 py-1 rounded text-[11px] transition shadow-sm cursor-pointer" onclick="approveRebate('${v.violation_id}')">
                 <i class="fa-solid fa-check mr-1"></i> Approve Deduction (HITL)
               </button>`
             }

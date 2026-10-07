@@ -1,55 +1,81 @@
 :root {
+  /* Official Department of Education (DepEd) & PH Brand Palette */
   --deped-blue: #0038A8;
-  --deped-dark-blue: #002266;
+  --deped-navy: #002266;
+  --deped-deep-navy: #001640;
+  --deped-light-blue: #EBF3FF;
+  --deped-sky: #0284C7;
   --deped-red: #CE1126;
+  --deped-red-light: #FEE2E2;
   --deped-gold: #FCD116;
-  --deped-gold-dark: #D4A500;
-  --bg-slate: #0F172A;
-  --card-slate: #1E293B;
-  --card-border: #334155;
-  --text-light: #F8FAFC;
-  --text-muted: #94A3B8;
-  --success-green: #10B981;
-  --warning-amber: #F59E0B;
-  --danger-red: #EF4444;
+  --deped-gold-dark: #B45309;
+  --deped-gold-light: #FEF9C3;
+
+  /* Enterprise Light Theme Surfaces */
+  --bg-page: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --card-border: #E2E8F0;
+  --card-border-subtle: #F1F5F9;
+  --text-main: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+
+  /* State Semantics */
+  --success-green: #059669;
+  --success-light: #DEF7EC;
+  --warning-amber: #D97706;
+  --warning-light: #FEF3C7;
+  --danger-red: #CE1126;
+  --danger-light: #FDE8E8;
 }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background-color: var(--bg-slate);
-  color: var(--text-light);
+  background-color: var(--bg-page);
+  color: var(--text-main);
   margin: 0;
   padding: 0;
+  -webkit-font-smoothing: antialiased;
 }
 
 .bg-deped-blue { background-color: var(--deped-blue); }
-.bg-deped-dark { background-color: var(--deped-dark-blue); }
-.text-deped-gold { color: var(--deped-gold); }
+.bg-deped-navy { background-color: var(--deped-navy); }
+.bg-deped-red { background-color: var(--deped-red); }
+.text-deped-blue { color: var(--deped-blue); }
+.text-deped-red { color: var(--deped-red); }
+.text-deped-gold { color: var(--deped-gold-dark); }
+.border-deped-blue { border-color: var(--deped-blue); }
+.border-deped-red { border-color: var(--deped-red); }
 .border-deped-gold { border-color: var(--deped-gold); }
 
+/* Clean Light Mode Cards */
 .card {
-  background-color: var(--card-slate);
+  background-color: var(--bg-card);
   border: 1px solid var(--card-border);
   border-radius: 0.75rem;
   padding: 1.25rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
 }
 
 .kpi-card {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #FFFFFF;
+  border: 1px solid var(--card-border);
   border-radius: 0.75rem;
   padding: 1rem 1.25rem;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 .kpi-card:hover {
   transform: translateY(-2px);
-  border-color: var(--deped-gold);
+  box-shadow: 0 4px 14px rgba(0, 56, 168, 0.08);
+  border-color: var(--deped-blue);
 }
 
+/* Light Mode Tab Navigation with DepEd Blue & Gold Accents */
 .tab-btn {
   padding: 0.75rem 1.25rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   border-bottom: 3px solid transparent;
   color: var(--text-muted);
   cursor: pointer;
@@ -57,21 +83,44 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  background: transparent;
 }
 .tab-btn:hover {
-  color: var(--text-light);
-  background: rgba(255, 255, 255, 0.03);
+  color: var(--deped-blue);
+  background: var(--card-border-subtle);
 }
 .tab-btn.active {
-  color: var(--deped-gold);
-  border-bottom-color: var(--deped-gold);
-  background: rgba(252, 209, 22, 0.08);
+  color: var(--deped-blue);
+  border-bottom-color: var(--deped-blue);
+  background: var(--deped-light-blue);
+  font-weight: 700;
 }
 
-.badge-compliant { background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid #059669; }
-.badge-warning { background: rgba(245, 158, 11, 0.2); color: #FBBF24; border: 1px solid #D97706; }
-.badge-danger { background: rgba(239, 68, 68, 0.2); color: #F87171; border: 1px solid #DC2626; }
-.badge-exempt { background: rgba(59, 130, 246, 0.2); color: #60A5FA; border: 1px solid #2563EB; }
+/* High-Contrast Light Mode Badges */
+.badge-compliant {
+  background: var(--success-light);
+  color: #03543F;
+  border: 1px solid #31C48D;
+  font-weight: 600;
+}
+.badge-warning {
+  background: var(--warning-light);
+  color: #92400E;
+  border: 1px solid #F59E0B;
+  font-weight: 600;
+}
+.badge-danger {
+  background: var(--danger-light);
+  color: #9B1C1C;
+  border: 1px solid #F98080;
+  font-weight: 600;
+}
+.badge-exempt {
+  background: var(--deped-light-blue);
+  color: #1E429F;
+  border: 1px solid #93C5FD;
+  font-weight: 600;
+}
 
 .live-pulse {
   display: inline-block;
@@ -89,8 +138,8 @@ body {
 }
 
 .code-box {
-  background: #090D16;
-  border: 1px solid #1E293B;
+  background: #0F172A;
+  border: 1px solid #334155;
   border-radius: 0.5rem;
   padding: 0.85rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -103,12 +152,12 @@ body {
   position: fixed;
   bottom: 1.5rem;
   right: 1.5rem;
-  background: #1E293B;
-  border: 1px solid var(--deped-gold);
-  color: #FFFFFF;
+  background: #FFFFFF;
+  border: 2px solid var(--deped-blue);
+  color: #0F172A;
   padding: 1rem 1.5rem;
   border-radius: 0.5rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   z-index: 9999;
   display: none;
   animation: slideUp 0.3s ease;
@@ -118,20 +167,20 @@ body {
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* ==================== GEOSPATIAL HEATMAP & GOOGLE MAPS DARK THEME ==================== */
+/* ==================== GEOSPATIAL MAP & LIGHT GOOGLE MAPS THEME ==================== */
 #phConnectivityMap {
-  background: #0B1120;
+  background: #E2E8F0;
   border-radius: 0.75rem;
 }
 
-/* Google Maps InfoWindow Dark Theme Overrides */
+/* Google Maps InfoWindow Light Theme Overrides */
 .gm-style-iw-c {
-  background-color: #0F172A !important;
-  color: #F8FAFC !important;
-  border: 1px solid #334155 !important;
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1 !important;
   border-radius: 0.75rem !important;
   padding: 0 !important;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.7) !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
 }
 
 .gm-style-iw-d {
@@ -141,13 +190,34 @@ body {
 }
 
 .gm-style-iw-tc::after {
-  background: #0F172A !important;
-  border: 1px solid #334155 !important;
+  background: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
 }
 
 .gm-ui-hover-effect {
-  filter: invert(1) !important;
+  filter: none !important;
   margin: 6px !important;
+}
+
+/* Persistent Demo Watermark Pill */
+.demo-watermark-pill {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+  border: 2px solid #F59E0B;
+  color: #92400E;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: auto;
 }
 
 

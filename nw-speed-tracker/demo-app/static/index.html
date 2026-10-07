@@ -12,45 +12,59 @@
   
   <link rel="stylesheet" href="/static/styles.css">
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
 
-  <!-- Top Persistent Banner -->
-  <div class="bg-gradient-to-r from-blue-900 via-indigo-950 to-blue-900 border-b border-blue-800/60 px-4 py-2 text-xs flex justify-between items-center text-slate-300">
+  <!-- Top Persistent Demo Only Disclaimer Bar -->
+  <div class="bg-amber-400 text-slate-950 font-bold px-4 py-2 text-xs flex flex-wrap justify-between items-center border-b border-amber-500 shadow-sm gap-2">
+    <div class="flex items-center gap-2">
+      <span class="bg-amber-900 text-white text-[10px] font-black px-2 py-0.5 rounded tracking-wider uppercase">DEMO ENVIRONMENT</span>
+      <span class="font-semibold text-slate-900">
+        <strong>DISCLAIMER:</strong> This is an interactive evaluation prototype for the Department of Education (DepEd). Telemetry, ISP speed tests, and SLA calculations are simulated benchmark data and not connected to live school networks.
+      </span>
+    </div>
+    <div class="flex items-center gap-3 text-[11px] font-medium text-slate-900">
+      <span class="hidden sm:inline"><i class="fa-solid fa-lock-open text-emerald-800 mr-1"></i> Public Demo Access Active</span>
+      <span class="bg-slate-900 text-amber-300 px-2 py-0.5 rounded text-[10px] font-mono font-bold">FOR EVALUATION ONLY</span>
+    </div>
+  </div>
+
+  <!-- DepEd Secondary Metadata Bar -->
+  <div class="bg-[#002266] text-white border-b border-blue-900 px-6 py-1.5 text-xs flex justify-between items-center shadow-inner">
     <div class="flex items-center space-x-3">
       <span class="live-pulse"></span>
-      <span class="font-semibold text-yellow-400">PROJECT BAYANIHAN NETPULSE</span>
-      <span>|</span>
-      <span>DepEd ICTS National Network Speed Tracker & Autonomous ISP SLA Governance</span>
-      <span class="bg-blue-800 text-blue-200 px-2 py-0.5 rounded text-[10px] font-bold">BRD v2.0 & TDD v2.0</span>
+      <span class="font-bold text-[#FCD116]">PROJECT BAYANIHAN NETPULSE</span>
+      <span class="text-blue-300">|</span>
+      <span class="text-blue-100">DepEd ICTS National Network Speed Tracker & Autonomous ISP SLA Governance</span>
+      <span class="bg-[#CE1126] text-white px-2 py-0.5 rounded text-[10px] font-bold">BRD v2.0 & TDD v2.0</span>
     </div>
-    <div class="flex items-center space-x-4">
-      <span class="text-slate-400"><i class="fa-solid fa-microchip mr-1 text-emerald-400"></i> Edge: Go Static OS Service (0-CapEx)</span>
-      <span class="text-slate-400"><i class="fa-solid fa-memory mr-1 text-sky-400"></i> Registry: 25MB RAM In-Memory</span>
-      <span class="text-slate-400"><i class="fa-solid fa-brain mr-1 text-purple-400"></i> AI: Gemini 3.8 Flash & 3.1 Pro</span>
+    <div class="hidden md:flex items-center space-x-4 text-blue-200 text-[11px]">
+      <span><i class="fa-solid fa-microchip mr-1 text-emerald-300"></i> Go Static OS Service (0-CapEx)</span>
+      <span><i class="fa-solid fa-memory mr-1 text-yellow-300"></i> 25MB RAM In-Memory</span>
+      <span><i class="fa-solid fa-brain mr-1 text-purple-300"></i> Gemini 3.8 Flash & 3.1 Pro</span>
     </div>
   </div>
 
   <!-- Primary Header & 3-Tier RBAC Switcher -->
-  <header class="bg-slate-800/80 backdrop-blur border-b border-slate-700/80 px-6 py-4 sticky top-0 z-40 flex flex-wrap justify-between items-center gap-4">
+  <header class="bg-[#0038A8] text-white px-6 py-4 shadow-md sticky top-0 z-40 flex flex-wrap justify-between items-center gap-4 border-b-4 border-[#CE1126]">
     <div class="flex items-center space-x-4">
-      <div class="w-12 h-12 rounded-lg bg-blue-700 flex items-center justify-center text-yellow-300 text-2xl font-bold shadow-lg border border-yellow-400/40">
+      <div class="w-12 h-12 rounded-lg bg-white flex items-center justify-center text-[#0038A8] text-2xl font-black shadow-md border-2 border-[#FCD116]">
         <i class="fa-solid fa-graduation-cap"></i>
       </div>
       <div>
         <div class="flex items-center gap-2">
           <h1 class="text-xl font-black tracking-tight text-white">Department of Education</h1>
-          <span class="text-xs bg-yellow-400 text-slate-900 font-bold px-2 py-0.5 rounded">Republic of the Philippines</span>
+          <span class="text-xs bg-[#FCD116] text-[#002266] font-extrabold px-2 py-0.5 rounded shadow-sm">Republika ng Pilipinas</span>
         </div>
-        <p class="text-xs text-slate-400">47,000+ Public Schools Nationwide Telemetry & Autonomous ISP SLA Auditor</p>
+        <p class="text-xs text-blue-100 font-medium">47,000+ Public Schools Nationwide Telemetry & Autonomous ISP SLA Auditor</p>
       </div>
     </div>
 
     <!-- RBAC Role Switcher -->
-    <div class="flex items-center bg-slate-900 border border-slate-700 rounded-lg p-1.5 shadow-inner">
-      <span class="text-xs text-slate-400 px-2 font-medium flex items-center gap-1.5">
-        <i class="fa-solid fa-user-shield text-yellow-400"></i> Active Persona:
+    <div class="flex items-center bg-[#002266] border border-blue-400/40 rounded-lg p-1.5 shadow-inner">
+      <span class="text-xs text-blue-100 px-2 font-medium flex items-center gap-1.5">
+        <i class="fa-solid fa-user-shield text-[#FCD116]"></i> Active Persona:
       </span>
-      <select id="rbacRoleSelect" class="bg-slate-800 text-xs font-semibold text-white px-3 py-1.5 rounded border border-slate-600 focus:outline-none focus:border-yellow-400 cursor-pointer">
+      <select id="rbacRoleSelect" class="bg-white text-xs font-bold text-[#002266] px-3 py-1.5 rounded border border-blue-200 focus:outline-none focus:ring-2 focus:ring-[#FCD116] cursor-pointer shadow-sm">
         <option value="tier1">🏛️ Tier 1: Central Office Executive (National Scope)</option>
         <option value="tier2">🗺️ Tier 2: Division Superintendent (SDO Scope)</option>
         <option value="tier3">🏫 Tier 3: School Principal ($0 BI License Scope)</option>
@@ -59,12 +73,12 @@
   </header>
 
   <!-- Navigation Tab Bar -->
-  <nav class="bg-slate-800/50 border-b border-slate-700/60 px-6 flex space-x-1 overflow-x-auto">
-    <button class="tab-btn active" data-tab="tab1"><i class="fa-solid fa-chart-pie"></i> Tab 1: National Command Center</button>
-    <button class="tab-btn" data-tab="tab2"><i class="fa-solid fa-map-location-dot"></i> Tab 2: Division Drill-Down & Cluster Outages</button>
-    <button class="tab-btn" data-tab="tab3"><i class="fa-solid fa-school"></i> Tab 3: School Principal Portal ($0 BI Cost)</button>
-    <button class="tab-btn" data-tab="tab4"><i class="fa-solid fa-robot text-purple-400"></i> Tab 4: Gemini Enterprise Hub & HITL Rebates</button>
-    <button class="tab-btn" data-tab="tab5"><i class="fa-solid fa-bolt text-amber-400"></i> Tab 5: 47k Live Chaos Simulator</button>
+  <nav class="bg-white border-b border-slate-200 px-6 flex space-x-1 overflow-x-auto shadow-sm">
+    <button class="tab-btn active" data-tab="tab1"><i class="fa-solid fa-chart-pie text-[#0038A8]"></i> Tab 1: National Command Center</button>
+    <button class="tab-btn" data-tab="tab2"><i class="fa-solid fa-map-location-dot text-[#0038A8]"></i> Tab 2: Division Drill-Down & Cluster Outages</button>
+    <button class="tab-btn" data-tab="tab3"><i class="fa-solid fa-school text-[#0038A8]"></i> Tab 3: School Principal Portal ($0 BI Cost)</button>
+    <button class="tab-btn" data-tab="tab4"><i class="fa-solid fa-robot text-purple-600"></i> Tab 4: Gemini Enterprise Hub & HITL Rebates</button>
+    <button class="tab-btn" data-tab="tab5"><i class="fa-solid fa-bolt text-amber-600"></i> Tab 5: 47k Live Chaos Simulator</button>
   </nav>
 
   <!-- Main Content Container -->
@@ -74,41 +88,41 @@
     <section id="tab1" class="tab-content space-y-6">
       <!-- Macro KPI Deck -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="kpi-card">
-          <div class="text-xs text-slate-400 font-medium">Enrolled DCP Admin PCs</div>
-          <div class="text-2xl font-black text-white mt-1" id="kpiTotalSchools">46,412 <span class="text-xs font-normal text-slate-400">/ 47,000</span></div>
-          <div class="text-[11px] text-emerald-400 mt-1 flex items-center gap-1"><i class="fa-solid fa-check-circle"></i> 98.7% Hardware 0-CapEx Rollout</div>
+        <div class="kpi-card border-l-4 border-l-[#0038A8]">
+          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Enrolled DCP Admin PCs</div>
+          <div class="text-2xl font-black text-slate-900 mt-1" id="kpiTotalSchools">46,412 <span class="text-xs font-normal text-slate-500">/ 47,000</span></div>
+          <div class="text-[11px] text-emerald-700 font-semibold mt-1 flex items-center gap-1"><i class="fa-solid fa-check-circle"></i> 98.7% Hardware 0-CapEx Rollout</div>
         </div>
-        <div class="kpi-card">
-          <div class="text-xs text-slate-400 font-medium">School-Hour Uptime Rate</div>
-          <div class="text-2xl font-black text-emerald-400 mt-1" id="kpiUptime">96.4%</div>
-          <div class="text-[11px] text-slate-400 mt-1">Active Mon-Fri 07:00-17:00 PHT</div>
+        <div class="kpi-card border-l-4 border-l-emerald-600">
+          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">School-Hour Uptime Rate</div>
+          <div class="text-2xl font-black text-emerald-700 mt-1" id="kpiUptime">96.4%</div>
+          <div class="text-[11px] text-slate-500 mt-1">Active Mon-Fri 07:00-17:00 PHT</div>
         </div>
-        <div class="kpi-card">
-          <div class="text-xs text-slate-400 font-medium">National CIR Compliance</div>
-          <div class="text-2xl font-black text-yellow-400 mt-1" id="kpiCirCompliance">78.2%</div>
-          <div class="text-[11px] text-slate-400 mt-1">Actual vs. Contracted Speed</div>
+        <div class="kpi-card border-l-4 border-l-[#FCD116]">
+          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">National CIR Compliance</div>
+          <div class="text-2xl font-black text-amber-600 mt-1" id="kpiCirCompliance">78.2%</div>
+          <div class="text-[11px] text-slate-500 mt-1">Actual vs. Contracted Speed</div>
         </div>
-        <div class="kpi-card border-amber-500/40 bg-amber-950/20">
-          <div class="text-xs text-amber-300 font-medium">Eligible SLA Billing Rebates</div>
-          <div class="text-2xl font-black text-amber-400 mt-1" id="kpiTotalRebates">₱4,842,500.00</div>
-          <div class="text-[11px] text-amber-300/80 mt-1 flex items-center gap-1"><i class="fa-solid fa-gavel"></i> RA 12009 Government Recovery</div>
+        <div class="kpi-card border-l-4 border-l-[#CE1126] bg-red-50/40">
+          <div class="text-xs text-[#CE1126] font-semibold uppercase tracking-wider">Eligible SLA Billing Rebates</div>
+          <div class="text-2xl font-black text-[#CE1126] mt-1" id="kpiTotalRebates">₱4,842,500.00</div>
+          <div class="text-[11px] text-red-700 mt-1 flex items-center gap-1"><i class="fa-solid fa-gavel"></i> RA 12009 Government Recovery</div>
         </div>
       </div>
 
       <!-- Interactive Philippine School Connectivity Heatmap & Geospatial Cluster Analyzer -->
-      <div class="card space-y-4 border border-blue-800/40">
+      <div class="card space-y-4 border border-slate-200 shadow-sm bg-white">
         <div class="flex flex-wrap justify-between items-center gap-3">
           <div>
             <div class="flex items-center gap-2">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-blue-950 text-blue-300 border border-blue-700">
-                <i class="fa-brands fa-google mr-1.5 text-yellow-400"></i> GOOGLE MAPS PLATFORM
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-[#0038A8] border border-blue-200">
+                <i class="fa-brands fa-google mr-1.5 text-yellow-500"></i> GOOGLE MAPS PLATFORM
               </span>
-              <h2 class="text-base font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-map-location-dot text-deped-gold"></i> Nationwide School Connectivity Issues Heatmap
+              <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-map-location-dot text-[#0038A8]"></i> Nationwide School Connectivity Issues Heatmap
               </h2>
             </div>
-            <p class="text-xs text-slate-400 mt-1">
+            <p class="text-xs text-slate-500 mt-1">
               Geospatial density of WAN outages, ISP selective throttling, local Wi-Fi bottlenecks, and SLA breaches across 47,000 public schools.
             </p>
           </div>
@@ -116,50 +130,50 @@
           <!-- Controls: Filters, Layers, and Hotspot Shortcuts -->
           <div class="flex flex-wrap items-center gap-2 text-xs">
             <!-- Issue Filter Pills -->
-            <div class="inline-flex rounded-lg bg-slate-800/90 p-1 border border-slate-700" id="mapFilterPills">
-              <button class="px-2.5 py-1 rounded text-xs font-semibold bg-blue-600 text-white map-filter-btn active" data-issue="ALL">All Schools</button>
-              <button class="px-2.5 py-1 rounded text-xs font-semibold text-slate-300 hover:text-white map-filter-btn" data-issue="OUTAGE">🔴 Outages</button>
-              <button class="px-2.5 py-1 rounded text-xs font-semibold text-slate-300 hover:text-white map-filter-btn" data-issue="THROTTLING">🟠 Throttling</button>
-              <button class="px-2.5 py-1 rounded text-xs font-semibold text-slate-300 hover:text-white map-filter-btn" data-issue="WIFI_EXEMPT">🟡 Wi-Fi (Exempt)</button>
-              <button class="px-2.5 py-1 rounded text-xs font-semibold text-slate-300 hover:text-white map-filter-btn" data-issue="SLA_BREACH">⚖️ SLA Breaches</button>
+            <div class="inline-flex rounded-lg bg-slate-100 p-1 border border-slate-200" id="mapFilterPills">
+              <button class="px-2.5 py-1 rounded text-xs font-semibold bg-[#0038A8] text-white map-filter-btn active" data-issue="ALL">All Schools</button>
+              <button class="px-2.5 py-1 rounded text-xs font-semibold text-slate-700 hover:text-slate-900 map-filter-btn" data-issue="OUTAGE">🔴 Outages</button>
+              <button class="px-2.5 py-1 rounded text-xs font-semibold text-slate-700 hover:text-slate-900 map-filter-btn" data-issue="THROTTLING">🟠 Throttling</button>
+              <button class="px-2.5 py-1 rounded text-xs font-semibold text-slate-700 hover:text-slate-900 map-filter-btn" data-issue="WIFI_EXEMPT">🟡 Wi-Fi (Exempt)</button>
+              <button class="px-2.5 py-1 rounded text-xs font-semibold text-slate-700 hover:text-slate-900 map-filter-btn" data-issue="SLA_BREACH">⚖️ SLA Breaches</button>
             </div>
 
             <!-- Layer Mode: Heatmap vs Pins -->
-            <div class="inline-flex rounded-lg bg-slate-800/90 p-1 border border-slate-700">
-              <button id="btnLayerHeat" class="px-2.5 py-1 rounded text-xs font-semibold bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 flex items-center gap-1">
-                <i class="fa-solid fa-fire-flame-curved"></i> Heat Density
+            <div class="inline-flex rounded-lg bg-slate-100 p-1 border border-slate-200">
+              <button id="btnLayerHeat" class="px-2.5 py-1 rounded text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-300 flex items-center gap-1">
+                <i class="fa-solid fa-fire-flame-curved text-amber-600"></i> Heat Density
               </button>
-              <button id="btnLayerPins" class="px-2.5 py-1 rounded text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-1">
+              <button id="btnLayerPins" class="px-2.5 py-1 rounded text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1">
                 <i class="fa-solid fa-location-dot"></i> School Pins
               </button>
             </div>
 
             <!-- Quick Hotspot Jump Buttons -->
-            <div class="flex items-center gap-1 bg-slate-800/80 px-2 py-1 rounded border border-slate-700">
-              <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Hotspots:</span>
-              <button class="text-[11px] px-2 py-0.5 rounded bg-red-950/80 hover:bg-red-900 text-red-300 border border-red-800 transition" onclick="zoomToHotspot(11.1578, 124.9912, 11, 'R08')">Leyte Cut (R08)</button>
-              <button class="text-[11px] px-2 py-0.5 rounded bg-orange-950/80 hover:bg-orange-900 text-orange-300 border border-orange-800 transition" onclick="zoomToHotspot(14.4586, 120.9427, 12, 'R04A')">Cavite Throttling (R04A)</button>
-              <button class="text-[11px] px-2 py-0.5 rounded bg-sky-950/80 hover:bg-sky-900 text-sky-300 border border-sky-800 transition" onclick="zoomToHotspot(6.7042, 121.9711, 10, 'BARMM')">Basilan Weather</button>
-              <button class="text-[11px] px-2 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-slate-200 transition" onclick="resetMapView()" title="Reset to Philippines national view"><i class="fa-solid fa-expand"></i> Reset</button>
+            <div class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded border border-slate-200">
+              <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Hotspots:</span>
+              <button class="text-[11px] px-2 py-0.5 rounded bg-red-100 hover:bg-red-200 text-red-800 border border-red-200 transition font-medium" onclick="zoomToHotspot(11.1578, 124.9912, 11, 'R08')">Leyte Cut (R08)</button>
+              <button class="text-[11px] px-2 py-0.5 rounded bg-orange-100 hover:bg-orange-200 text-orange-800 border border-orange-200 transition font-medium" onclick="zoomToHotspot(14.4586, 120.9427, 12, 'R04A')">Cavite Throttling (R04A)</button>
+              <button class="text-[11px] px-2 py-0.5 rounded bg-sky-100 hover:bg-sky-200 text-sky-800 border border-sky-200 transition font-medium" onclick="zoomToHotspot(6.7042, 121.9711, 10, 'BARMM')">Basilan Weather</button>
+              <button class="text-[11px] px-2 py-0.5 rounded bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 transition" onclick="resetMapView()" title="Reset to Philippines national view"><i class="fa-solid fa-expand"></i> Reset</button>
             </div>
           </div>
         </div>
 
         <!-- Map Canvas -->
-        <div id="phConnectivityMap" class="w-full h-[480px] rounded-xl overflow-hidden border border-slate-700 relative z-10 shadow-inner"></div>
+        <div id="phConnectivityMap" class="w-full h-[480px] rounded-xl overflow-hidden border border-slate-200 relative z-10 shadow-sm"></div>
 
         <!-- Legend and Live Stats Bar -->
-        <div class="flex flex-wrap justify-between items-center gap-3 pt-2 border-t border-slate-800 text-xs">
-          <div class="flex flex-wrap items-center gap-4 text-slate-300">
-            <span class="font-bold text-slate-400">Map Legend:</span>
-            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-red-500 inline-block shadow-sm shadow-red-500/50"></span> <strong>🔴 Red:</strong> Critical Fiber/WAN Outage</span>
-            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-orange-500 inline-block shadow-sm shadow-orange-500/50"></span> <strong>🟠 Orange:</strong> ISP Selective Throttling</span>
-            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-yellow-400 inline-block"></span> <strong>🟡 Yellow:</strong> Local Wi-Fi Issue (SLA Exempt)</span>
-            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-sky-400 inline-block"></span> <strong>🔵 Cyan:</strong> LEO Weather / Satellite Rain Fade</span>
-            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span> <strong>🟢 Green:</strong> 100% Compliant CIR</span>
+        <div class="flex flex-wrap justify-between items-center gap-3 pt-2 border-t border-slate-200 text-xs">
+          <div class="flex flex-wrap items-center gap-4 text-slate-600">
+            <span class="font-bold text-slate-700">Map Legend:</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-red-600 inline-block shadow-sm"></span> <strong>🔴 Red:</strong> Critical Fiber/WAN Outage</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-orange-500 inline-block shadow-sm"></span> <strong>🟠 Orange:</strong> ISP Selective Throttling</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span> <strong>🟡 Yellow:</strong> Local Wi-Fi Issue (SLA Exempt)</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-sky-500 inline-block"></span> <strong>🔵 Cyan:</strong> LEO Weather / Satellite Rain Fade</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-600 inline-block"></span> <strong>🟢 Green:</strong> 100% Compliant CIR</span>
           </div>
-          <div id="mapTelemetryBadge" class="text-slate-400 font-mono text-[11px]">
-            Showing <strong id="mapVisibleCount" class="text-white">18</strong> schools | Bounding box: Philippines Archipelago
+          <div id="mapTelemetryBadge" class="text-slate-500 font-mono text-[11px]">
+            Showing <strong id="mapVisibleCount" class="text-slate-900 font-bold">18</strong> schools | Bounding box: Philippines Archipelago
           </div>
         </div>
       </div>
@@ -167,15 +181,15 @@
       <!-- Regional Summary Cards & ISP SLA Leaderboard -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <!-- 17-Region Grid Card -->
-        <div class="lg:col-span-7 card flex flex-col">
+        <div class="lg:col-span-7 card flex flex-col bg-white border border-slate-200 shadow-sm">
           <div class="flex justify-between items-center mb-4">
             <div>
-              <h2 class="text-base font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-map text-deped-gold"></i> 17 Philippine Regions Connectivity Heatmap
+              <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-map text-[#0038A8]"></i> 17 Philippine Regions Connectivity Overview
               </h2>
-              <p class="text-xs text-slate-400">Click any region to inspect division health and cluster fiber cuts</p>
+              <p class="text-xs text-slate-500">Click any region to inspect division health and cluster fiber cuts</p>
             </div>
-            <span class="text-xs bg-slate-800 text-slate-300 px-2 py-1 rounded border border-slate-700">47,000 Schools Total</span>
+            <span class="text-xs bg-slate-100 text-slate-700 font-semibold px-2.5 py-1 rounded border border-slate-200">47,000 Schools Total</span>
           </div>
 
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 overflow-y-auto max-h-[380px] p-1" id="regionalGrid">
@@ -184,37 +198,37 @@
         </div>
 
         <!-- ISP Anti-Gaming & SLA Leaderboard -->
-        <div class="lg:col-span-5 card flex flex-col">
+        <div class="lg:col-span-5 card flex flex-col bg-white border border-slate-200 shadow-sm">
           <div class="flex justify-between items-center mb-4">
             <div>
-              <h2 class="text-base font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-shield-halved text-emerald-400"></i> ISP SLA & Anti-Gaming Leaderboard
+              <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-emerald-600"></i> ISP SLA & Anti-Gaming Leaderboard
               </h2>
-              <p class="text-xs text-slate-400">Exposes public speedtest whitelisting vs. DepEd Cloud Anchor speed</p>
+              <p class="text-xs text-slate-500">Exposes public speedtest whitelisting vs. DepEd Cloud Anchor speed</p>
             </div>
           </div>
 
           <div class="overflow-x-auto flex-1">
             <table class="w-full text-xs text-left">
-              <thead class="text-slate-400 border-b border-slate-700">
+              <thead class="text-slate-600 font-bold border-b border-slate-200 bg-slate-50">
                 <tr>
-                  <th class="py-2">ISP Provider</th>
-                  <th class="py-2 text-center">Anchor %</th>
-                  <th class="py-2 text-center">Public %</th>
-                  <th class="py-2 text-right">Rebate Eligible</th>
+                  <th class="py-2.5 px-2">ISP Provider</th>
+                  <th class="py-2.5 text-center">Anchor %</th>
+                  <th class="py-2.5 text-center">Public %</th>
+                  <th class="py-2.5 text-right px-2">Rebate Eligible</th>
                 </tr>
               </thead>
-              <tbody id="ispLeaderboardBody" class="divide-y divide-slate-800">
+              <tbody id="ispLeaderboardBody" class="divide-y divide-slate-100">
                 <!-- Dynamically populated -->
               </tbody>
             </table>
           </div>
 
-          <div class="mt-4 p-3 bg-red-950/40 border border-red-800/60 rounded-lg text-xs flex items-start gap-2.5">
-            <i class="fa-solid fa-triangle-exclamation text-red-400 mt-0.5"></i>
+          <div class="mt-4 p-3.5 bg-red-50 border border-red-200 rounded-lg text-xs flex items-start gap-2.5">
+            <i class="fa-solid fa-triangle-exclamation text-[#CE1126] mt-0.5 text-sm"></i>
             <div>
-              <strong class="text-red-300">Dual-Probe Alert: SpeedNet Regional Selective Throttling</strong>
-              <p class="text-slate-300 mt-0.5">SpeedNet delivers 95.0% on public speedtests but drops to 21.4% on the DepEd Cloud Anchor during instructional hours. Automated ₱1.61M rebate deduction triggered.</p>
+              <strong class="text-[#CE1126] font-bold">Dual-Probe Alert: SpeedNet Regional Selective Throttling</strong>
+              <p class="text-slate-700 mt-0.5">SpeedNet delivers 95.0% on public speedtests but drops to 21.4% on the DepEd Cloud Anchor during instructional hours. Automated ₱1.61M rebate deduction triggered.</p>
             </div>
           </div>
         </div>
@@ -224,26 +238,26 @@
     <!-- ==================== TAB 2: DIVISION DRILL-DOWN ==================== -->
     <section id="tab2" class="tab-content hidden space-y-6">
       <!-- Contextual Cluster Anomaly Alert -->
-      <div class="card border-red-700/80 bg-gradient-to-r from-red-950/50 via-slate-900 to-slate-900">
+      <div class="card border-2 border-red-200 bg-gradient-to-r from-red-50 via-white to-red-50/40 shadow-sm">
         <div class="flex flex-wrap items-center justify-between gap-4">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-red-800/80 flex items-center justify-center text-white text-lg animate-pulse">
+            <div class="w-10 h-10 rounded-full bg-[#CE1126] flex items-center justify-center text-white text-lg shadow-md animate-pulse">
               <i class="fa-solid fa-tower-broadcast"></i>
             </div>
             <div>
               <div class="flex items-center gap-2">
-                <span class="text-xs bg-red-600 text-white font-bold px-2 py-0.5 rounded">CLUSTER INCIDENT ACTIVE</span>
-                <h3 class="text-base font-bold text-white">Region VIII — Leyte Division Fiber Backbone Severed</h3>
+                <span class="text-xs bg-[#CE1126] text-white font-bold px-2 py-0.5 rounded shadow-sm">CLUSTER INCIDENT ACTIVE</span>
+                <h3 class="text-base font-bold text-slate-900">Region VIII — Leyte Division Fiber Backbone Severed</h3>
               </div>
-              <p class="text-xs text-slate-300 mt-0.5">
+              <p class="text-xs text-slate-600 mt-0.5">
                 Vertex AI / BigQuery ML Anomaly Detection identified <strong>24 public schools</strong> in Leyte reporting 
-                <code class="text-red-300">VERIFIED_WAN_OFFLINE</code> within a 10-minute window while local school routers responded normally.
+                <code class="text-red-700 bg-red-100 px-1 py-0.5 rounded font-mono font-bold">VERIFIED_WAN_OFFLINE</code> within a 10-minute window while local school routers responded normally.
               </p>
             </div>
           </div>
           <div class="text-right">
-            <div class="text-xs text-slate-400">Alarm Suppression:</div>
-            <div class="text-xs font-bold text-emerald-400 mt-0.5">24 Router Alarms Suppressed &rarr; 1 Master Ticket (#DEPED-INC-9012)</div>
+            <div class="text-xs text-slate-500 font-medium">Alarm Suppression:</div>
+            <div class="text-xs font-bold text-emerald-700 mt-0.5 bg-emerald-50 px-2 py-1 rounded border border-emerald-200 inline-block">24 Router Alarms Suppressed &rarr; 1 Master Ticket (#DEPED-INC-9012)</div>
           </div>
         </div>
       </div>
@@ -253,24 +267,24 @@
         <!-- Division Watchlist Table -->
         <div class="lg:col-span-8 card">
           <div class="flex justify-between items-center mb-4">
-            <h2 class="text-base font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-list-check text-yellow-400"></i> Division School Telemetry Watchlist
+            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-list-check text-amber-500"></i> Division School Telemetry Watchlist
             </h2>
-            <span class="text-xs text-slate-400">Showing 5 Benchmark Showcase Archetypes</span>
+            <span class="text-xs text-slate-500">Showing 5 Benchmark Showcase Archetypes</span>
           </div>
 
           <div class="overflow-x-auto">
             <table class="w-full text-xs text-left">
-              <thead class="text-slate-400 border-b border-slate-700">
+              <thead class="text-slate-600 bg-slate-50 border-b border-slate-200">
                 <tr>
-                  <th class="py-2">School & BEIS ID</th>
-                  <th class="py-2">Division / Region</th>
-                  <th class="py-2">Medium & Hop</th>
-                  <th class="py-2">Anchor Speed</th>
-                  <th class="py-2">Diagnostic Status</th>
+                  <th class="py-2.5 px-2">School & BEIS ID</th>
+                  <th class="py-2.5 px-2">Division / Region</th>
+                  <th class="py-2.5 px-2">Medium & Hop</th>
+                  <th class="py-2.5 px-2">Anchor Speed</th>
+                  <th class="py-2.5 px-2">Diagnostic Status</th>
                 </tr>
               </thead>
-              <tbody id="divisionWatchlistBody" class="divide-y divide-slate-800">
+              <tbody id="divisionWatchlistBody" class="divide-y divide-slate-100">
                 <!-- Dynamically populated -->
               </tbody>
             </table>
@@ -280,16 +294,16 @@
         <!-- 1-Click Enrollment Installer Generator -->
         <div class="lg:col-span-4 card space-y-4">
           <div>
-            <h2 class="text-base font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-download text-sky-400"></i> Division Enrollment Generator
+            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-download text-[#0038A8]"></i> Division Enrollment Generator
             </h2>
-            <p class="text-xs text-slate-400 mt-1">Generate a 1-click bootstrap command with one-time cryptographic enrollment token for standalone DCP Admin PCs.</p>
+            <p class="text-xs text-slate-500 mt-1">Generate a 1-click bootstrap command with one-time cryptographic enrollment token for standalone DCP Admin PCs.</p>
           </div>
 
           <div class="space-y-3">
             <div>
-              <label class="text-xs text-slate-300 font-medium">Select School:</label>
-              <select id="enrollSchoolSelect" class="w-full bg-slate-800 text-xs text-white p-2 rounded border border-slate-700 mt-1">
+              <label class="text-xs text-slate-700 font-semibold">Select School:</label>
+              <select id="enrollSchoolSelect" class="w-full bg-white text-xs text-slate-900 p-2 rounded border border-slate-300 shadow-sm mt-1 focus:outline-none focus:border-[#0038A8]">
                 <option value="104512">104512 - Bacoor National High School</option>
                 <option value="109821">109821 - Tondo Elementary School</option>
                 <option value="121405">121405 - Palo National High School</option>
@@ -298,8 +312,8 @@
               </select>
             </div>
             <div>
-              <label class="text-xs text-slate-300 font-medium">Target Operating System:</label>
-              <div class="flex gap-4 mt-1 text-xs">
+              <label class="text-xs text-slate-700 font-semibold">Target Operating System:</label>
+              <div class="flex gap-4 mt-1 text-xs text-slate-700">
                 <label class="flex items-center gap-1.5 cursor-pointer">
                   <input type="radio" name="enrollOS" value="windows" checked> Windows Service (.msi)
                 </label>
@@ -308,15 +322,15 @@
                 </label>
               </div>
             </div>
-            <button id="btnGenerateEnroll" class="w-full bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 rounded text-xs transition">
-              <i class="fa-solid fa-key mr-1"></i> Generate Enrollment Command
+            <button id="btnGenerateEnroll" class="w-full bg-[#0038A8] hover:bg-[#002b80] text-white font-bold py-2 rounded text-xs shadow transition">
+              <i class="fa-solid fa-key mr-1 text-[#FCD116]"></i> Generate Enrollment Command
             </button>
           </div>
 
           <div id="enrollCommandBox" class="hidden space-y-2">
-            <span class="text-xs text-emerald-400 font-semibold"><i class="fa-solid fa-check"></i> Command Ready:</span>
+            <span class="text-xs text-emerald-700 font-semibold"><i class="fa-solid fa-check"></i> Command Ready:</span>
             <div class="code-box text-[11px]" id="enrollCommandText"></div>
-            <p class="text-[10px] text-slate-400">Executes silently as SYSTEM. Stores unique per-device HMAC key in Windows DPAPI / Linux keystore.</p>
+            <p class="text-[10px] text-slate-500">Executes silently as SYSTEM. Stores unique per-device HMAC key in Windows DPAPI / Linux keystore.</p>
           </div>
         </div>
       </div>
@@ -325,28 +339,28 @@
     <!-- ==================== TAB 3: SCHOOL PRINCIPAL PORTAL ==================== -->
     <section id="tab3" class="tab-content hidden space-y-6">
       <!-- School Selector & Quick Action Bar -->
-      <div class="card flex flex-wrap justify-between items-center gap-4 bg-slate-800/90">
+      <div class="card flex flex-wrap justify-between items-center gap-4 bg-white border border-slate-200">
         <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-lg bg-yellow-400 text-slate-900 flex items-center justify-center text-2xl font-bold">
+          <div class="w-12 h-12 rounded-lg bg-[#0038A8] text-[#FCD116] flex items-center justify-center text-2xl font-bold shadow">
             <i class="fa-solid fa-school"></i>
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <select id="portalSchoolSelect" class="bg-slate-900 text-white font-bold text-sm px-3 py-1 rounded border border-slate-700 focus:outline-none focus:border-yellow-400">
+              <select id="portalSchoolSelect" class="bg-slate-50 text-slate-900 font-bold text-sm px-3 py-1.5 rounded border border-slate-300 shadow-sm focus:outline-none focus:border-[#0038A8]">
                 <option value="104512">104512 - Bacoor National High School (Selective Throttling)</option>
                 <option value="109821">109821 - Tondo Elementary School (Weak Classroom Wi-Fi)</option>
                 <option value="121405">121405 - Palo National High School (Regional Fiber Cut)</option>
                 <option value="139501">139501 - Basilan Island National High School (Starlink Satellite)</option>
                 <option value="112804">112804 - Iloilo Central Elementary School (100% Compliant)</option>
               </select>
-              <span class="text-xs bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded font-mono">$0 BI Seat License Cost</span>
+              <span class="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded font-semibold font-mono">$0 BI Seat License Cost</span>
             </div>
-            <p class="text-xs text-slate-400 mt-1" id="schoolSubtitle">Region IV-A (CALABARZON) | Cavite Province | ISP: SpeedNet Regional</p>
+            <p class="text-xs text-slate-500 mt-1" id="schoolSubtitle">Region IV-A (CALABARZON) | Cavite Province | ISP: SpeedNet Regional</p>
           </div>
         </div>
 
-        <button id="btnOpenCert" class="bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-bold px-4 py-2 rounded text-xs flex items-center gap-2 shadow-lg transition">
-          <i class="fa-solid fa-file-pdf"></i> Download Official Speed Certificate (PDF)
+        <button id="btnOpenCert" class="bg-[#FCD116] hover:bg-amber-300 text-[#002266] font-bold px-4 py-2 rounded text-xs flex items-center gap-2 shadow border border-amber-300 transition">
+          <i class="fa-solid fa-file-pdf text-[#CE1126]"></i> Download Official Speed Certificate (PDF)
         </button>
       </div>
 
@@ -354,8 +368,8 @@
       <div class="card" id="localHopCard">
         <div class="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div class="text-xs text-slate-400 font-medium">STEP 1: LOCAL HOP VERIFICATION (Admin PC &rarr; School Router 192.168.1.1)</div>
-            <div class="text-sm font-bold text-white mt-1 flex items-center gap-2" id="localHopVerdict">
+            <div class="text-xs text-slate-500 font-medium">STEP 1: LOCAL HOP VERIFICATION (Admin PC &rarr; School Router 192.168.1.1)</div>
+            <div class="text-sm font-bold text-slate-900 mt-1 flex items-center gap-2" id="localHopVerdict">
               <!-- Dynamically populated -->
             </div>
           </div>
@@ -369,12 +383,12 @@
       <div class="card space-y-3">
         <div class="flex justify-between items-center">
           <div>
-            <h2 class="text-base font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-chart-line text-deped-gold"></i> 5-Day School-Hour Dual-Probe Performance (07:00 AM – 05:00 PM PHT)
+            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-chart-line text-[#0038A8]"></i> 5-Day School-Hour Dual-Probe Performance (07:00 AM – 05:00 PM PHT)
             </h2>
-            <p class="text-xs text-slate-400">Compares actual DepEd Cloud Anchor speed against public speedtest servers to expose daytime throttling</p>
+            <p class="text-xs text-slate-500">Compares actual DepEd Cloud Anchor speed against public speedtest servers to expose daytime throttling</p>
           </div>
-          <span class="text-xs bg-slate-800 text-slate-400 px-2.5 py-1 rounded">15-Min Partition Cache</span>
+          <span class="text-xs bg-slate-100 text-slate-600 border border-slate-200 px-2.5 py-1 rounded font-medium">15-Min Partition Cache</span>
         </div>
 
         <div class="h-72 w-full">
@@ -383,37 +397,37 @@
       </div>
 
       <!-- Gemini 3.8 Flash Grounded Bilingual Diagnostic Card -->
-      <div class="card border-purple-800/60 bg-gradient-to-br from-slate-900 via-purple-950/20 to-slate-900 space-y-4">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+      <div class="card border-purple-200 bg-gradient-to-br from-white via-purple-50/20 to-white shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-purple-100 pb-3">
           <div class="flex items-center gap-2.5">
-            <span class="w-8 h-8 rounded-lg bg-purple-700/80 flex items-center justify-center text-white text-sm">
+            <span class="w-8 h-8 rounded-lg bg-purple-700 flex items-center justify-center text-white text-sm shadow">
               <i class="fa-solid fa-brain"></i>
             </span>
             <div>
-              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
                 Gemini 3.8 Flash Grounded Diagnostic Card
-                <span class="text-[10px] bg-purple-900 text-purple-200 px-2 py-0.5 rounded font-mono">Event-Driven Cached</span>
+                <span class="text-[10px] bg-purple-100 text-purple-800 border border-purple-200 px-2 py-0.5 rounded font-mono font-semibold">Event-Driven Cached</span>
               </h3>
-              <p class="text-xs text-slate-400">Plain-language guidance for non-technical School Principals and Head Teachers</p>
+              <p class="text-xs text-slate-500">Plain-language guidance for non-technical School Principals and Head Teachers</p>
             </div>
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- English Diagnosis -->
-          <div class="p-3.5 bg-slate-800/80 rounded-lg border border-slate-700/80 space-y-2">
-            <span class="text-xs font-bold text-sky-400 flex items-center gap-1.5">
+          <div class="p-3.5 bg-blue-50/60 rounded-lg border border-blue-200 space-y-2">
+            <span class="text-xs font-bold text-[#0038A8] flex items-center gap-1.5">
               <span>🇺🇸</span> Plain English Diagnosis for Principal:
             </span>
-            <p class="text-xs text-slate-200 leading-relaxed" id="diagEnText">Loading diagnosis...</p>
+            <p class="text-xs text-slate-700 leading-relaxed" id="diagEnText">Loading diagnosis...</p>
           </div>
 
           <!-- Tagalog Diagnosis -->
-          <div class="p-3.5 bg-slate-800/80 rounded-lg border border-slate-700/80 space-y-2">
-            <span class="text-xs font-bold text-yellow-400 flex items-center gap-1.5">
+          <div class="p-3.5 bg-amber-50/60 rounded-lg border border-amber-200 space-y-2">
+            <span class="text-xs font-bold text-amber-900 flex items-center gap-1.5">
               <span>🇵🇭</span> Paliwanag sa Tagalog para sa Punong-Guro:
             </span>
-            <p class="text-xs text-slate-200 leading-relaxed" id="diagTlText">Naglo-load ng pagsusuri...</p>
+            <p class="text-xs text-slate-700 leading-relaxed" id="diagTlText">Naglo-load ng pagsusuri...</p>
           </div>
         </div>
       </div>
@@ -422,47 +436,47 @@
     <!-- ==================== TAB 4: GEMINI ENTERPRISE HUB ==================== -->
     <section id="tab4" class="tab-content hidden space-y-6">
       <!-- Section A: Bilingual Conversational Analytics -->
-      <div class="card border-purple-800/40 space-y-4">
+      <div class="card border-purple-200 bg-white space-y-4">
         <div class="flex justify-between items-center">
           <div>
-            <h2 class="text-base font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-comments text-purple-400"></i> Bilingual Conversational Analytics (Gemini 3.8 Flash in Looker)
+            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-comments text-purple-700"></i> Bilingual Conversational Analytics (Gemini 3.8 Flash in Looker)
             </h2>
-            <p class="text-xs text-slate-400">Ask natural language questions in English, Tagalog, or Taglish to generate Date-Partitioned BigQuery SQL</p>
+            <p class="text-xs text-slate-500">Ask natural language questions in English, Tagalog, or Taglish to generate Date-Partitioned BigQuery SQL</p>
           </div>
-          <span class="text-xs bg-purple-950 text-purple-300 border border-purple-800 px-2.5 py-1 rounded">LookML Semantic Model</span>
+          <span class="text-xs bg-purple-50 text-purple-700 border border-purple-200 px-2.5 py-1 rounded font-semibold font-mono">LookML Semantic Model</span>
         </div>
 
         <!-- 1-Click Preset Queries -->
         <div class="flex flex-wrap gap-2 text-xs">
-          <button class="nl-pill bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-full border border-slate-700 transition" data-query="Which schools in Region IV-A have been 50% below their contracted speed this week?">
+          <button class="nl-pill bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-full border border-slate-300 transition font-medium" data-query="Which schools in Region IV-A have been 50% below their contracted speed this week?">
             🇺🇸 "Which schools in Region IV-A are 50% below speed this week?"
           </button>
-          <button class="nl-pill bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-full border border-slate-700 transition" data-query="Aling mga ISP ang may pinakamaraming SLA violation ngayong buwan at magkano ang total rebate?">
+          <button class="nl-pill bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-full border border-slate-300 transition font-medium" data-query="Aling mga ISP ang may pinakamaraming SLA violation ngayong buwan at magkano ang total rebate?">
             🇵🇭 "Aling mga ISP ang may pinakamaraming SLA violation ngayong buwan?"
           </button>
-          <button class="nl-pill bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-full border border-slate-700 transition" data-query="Show schools where public speedtest is >80 Mbps but DepEd Cloud Anchor is <25 Mbps">
+          <button class="nl-pill bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-full border border-slate-300 transition font-medium" data-query="Show schools where public speedtest is >80 Mbps but DepEd Cloud Anchor is <25 Mbps">
             🎭 "Expose Selective Throttling (Public >80 Mbps vs DepEd Anchor <25 Mbps)"
           </button>
         </div>
 
         <!-- Interactive Search Bar -->
         <div class="flex gap-2">
-          <input type="text" id="nlQueryInput" placeholder="Magtanong sa Tagalog o English tungkol sa network status ng mga paaralan..." class="flex-1 bg-slate-900 border border-slate-700 text-sm text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-purple-400">
-          <button id="btnExecuteQuery" class="bg-purple-700 hover:bg-purple-600 text-white font-bold px-6 py-2.5 rounded-lg text-xs flex items-center gap-2 transition">
-            <i class="fa-solid fa-paper-plane"></i> Execute Query
+          <input type="text" id="nlQueryInput" placeholder="Magtanong sa Tagalog o English tungkol sa network status ng mga paaralan..." class="flex-1 bg-white border border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 px-4 py-2.5 rounded-lg focus:outline-none focus:border-purple-600 shadow-sm">
+          <button id="btnExecuteQuery" class="bg-purple-700 hover:bg-purple-800 text-white font-bold px-6 py-2.5 rounded-lg text-xs flex items-center gap-2 shadow transition">
+            <i class="fa-solid fa-paper-plane text-yellow-300"></i> Execute Query
           </button>
         </div>
 
         <!-- Conversational Result Area -->
         <div id="nlResultBox" class="hidden space-y-4 pt-2">
-          <div class="p-3.5 bg-slate-900/90 border border-purple-800/60 rounded-lg">
-            <span class="text-xs text-purple-300 font-bold block mb-1">🤖 Gemini 3.8 Flash Conversational Answer:</span>
-            <p class="text-xs text-slate-200" id="nlAnswerText"></p>
+          <div class="p-3.5 bg-purple-50/70 border border-purple-200 rounded-lg">
+            <span class="text-xs text-purple-900 font-bold block mb-1">🤖 Gemini 3.8 Flash Conversational Answer:</span>
+            <p class="text-xs text-slate-800" id="nlAnswerText"></p>
           </div>
 
           <div>
-            <span class="text-xs text-slate-400 font-semibold block mb-1"><i class="fa-solid fa-code text-sky-400"></i> Generated Date-Partitioned BigQuery SQL:</span>
+            <span class="text-xs text-slate-600 font-semibold block mb-1"><i class="fa-solid fa-code text-[#0038A8]"></i> Generated Date-Partitioned BigQuery SQL:</span>
             <div class="code-box text-[11px]" id="nlSqlText"></div>
           </div>
 
@@ -476,14 +490,14 @@
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <!-- Left: Zero-Touch Autonomous ITSM & Google Workspace Alert Feed -->
         <div class="lg:col-span-6 card space-y-4">
-          <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+          <div class="flex justify-between items-center border-b border-slate-200 pb-3">
             <div>
-              <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-bolt text-yellow-400"></i> Zero-Touch Autonomous Technical Tickets
+              <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-amber-500"></i> Zero-Touch Autonomous Technical Tickets
               </h3>
-              <p class="text-xs text-slate-400">Auto-dispatched immediately to ITSM + Google Workspace</p>
+              <p class="text-xs text-slate-500">Auto-dispatched immediately to ITSM + Google Workspace</p>
             </div>
-            <span class="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded font-mono">Zero Human Friction</span>
+            <span class="text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded font-mono font-semibold">Zero Human Friction</span>
           </div>
 
           <div class="space-y-3 overflow-y-auto max-h-[420px]" id="zeroTouchFeed">
@@ -492,15 +506,15 @@
         </div>
 
         <!-- Right: Mandatory Human-in-the-Loop (HITL) Financial SLA Rebate Queue -->
-        <div class="lg:col-span-6 card space-y-4 border-amber-800/40">
-          <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <div class="lg:col-span-6 card space-y-4 border-amber-200">
+          <div class="flex justify-between items-center border-b border-slate-200 pb-3">
             <div>
-              <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-file-invoice-dollar text-amber-400"></i> Mandatory HITL Financial Rebate Queue
+              <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-file-invoice-dollar text-[#0038A8]"></i> Mandatory HITL Financial Rebate Queue
               </h3>
-              <p class="text-xs text-slate-400">Gemini 3.1 Pro drafts COA-ready memo; DITO / ICTS clicks to approve</p>
+              <p class="text-xs text-slate-500">Gemini 3.1 Pro drafts COA-ready memo; DITO / ICTS clicks to approve</p>
             </div>
-            <span class="text-[10px] bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded font-mono">RA 12009 Compliance</span>
+            <span class="text-[10px] bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded font-mono font-semibold">RA 12009 Compliance</span>
           </div>
 
           <div class="space-y-3 overflow-y-auto max-h-[420px]" id="hitlRebateQueue">
@@ -514,51 +528,51 @@
     <section id="tab5" class="tab-content hidden space-y-6">
       <div class="card space-y-4">
         <div>
-          <h2 class="text-base font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-flask-vial text-amber-400"></i> Live 47,000-Node DCP Admin PC Telemetry & Chaos Simulator
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-flask-vial text-[#0038A8]"></i> Live 47,000-Node DCP Admin PC Telemetry & Chaos Simulator
           </h2>
-          <p class="text-xs text-slate-400">Inject real-time telemetry events modeled after the Go static agent to test edge disambiguation and Gemini workflows live.</p>
+          <p class="text-xs text-slate-500">Inject real-time telemetry events modeled after the Go static agent to test edge disambiguation and Gemini workflows live.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <button class="sim-btn p-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-sky-400 rounded-lg text-left transition flex flex-col justify-between" data-scenario="staggered_wave">
+          <button class="sim-btn p-4 bg-slate-50 hover:bg-white border border-slate-200 hover:border-[#0038A8] rounded-lg text-left transition shadow-sm flex flex-col justify-between" data-scenario="staggered_wave">
             <div>
-              <span class="text-xs font-bold text-sky-400 flex items-center gap-1.5"><i class="fa-solid fa-wave-square"></i> Scenario 1: Normal Wave</span>
-              <p class="text-[11px] text-slate-300 mt-1">Simulate 50 schools reporting with 1-900s jitter during instructional hours.</p>
+              <span class="text-xs font-bold text-[#0038A8] flex items-center gap-1.5"><i class="fa-solid fa-wave-square"></i> Scenario 1: Normal Wave</span>
+              <p class="text-[11px] text-slate-600 mt-1">Simulate 50 schools reporting with 1-900s jitter during instructional hours.</p>
             </div>
-            <span class="text-[10px] text-slate-500 mt-3 font-mono">1-900s Jitter Applied</span>
+            <span class="text-[10px] text-slate-400 mt-3 font-mono">1-900s Jitter Applied</span>
           </button>
 
-          <button class="sim-btn p-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-blue-400 rounded-lg text-left transition flex flex-col justify-between" data-scenario="weak_wifi">
+          <button class="sim-btn p-4 bg-slate-50 hover:bg-white border border-slate-200 hover:border-blue-500 rounded-lg text-left transition shadow-sm flex flex-col justify-between" data-scenario="weak_wifi">
             <div>
-              <span class="text-xs font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-wifi"></i> Scenario 2: Weak School Wi-Fi</span>
-              <p class="text-[11px] text-slate-300 mt-1">School 109821 Admin PC Wi-Fi drops to -88 dBm RSSI. Verify SLA penalty is EXEMPTED.</p>
+              <span class="text-xs font-bold text-blue-700 flex items-center gap-1.5"><i class="fa-solid fa-wifi"></i> Scenario 2: Weak School Wi-Fi</span>
+              <p class="text-[11px] text-slate-600 mt-1">School 109821 Admin PC Wi-Fi drops to -88 dBm RSSI. Verify SLA penalty is EXEMPTED.</p>
             </div>
-            <span class="text-[10px] text-blue-400 mt-3 font-mono">Tests Local Wi-Fi Exemption</span>
+            <span class="text-[10px] text-blue-600 mt-3 font-mono font-medium">Tests Local Wi-Fi Exemption</span>
           </button>
 
-          <button class="sim-btn p-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-red-400 rounded-lg text-left transition flex flex-col justify-between" data-scenario="selective_throttling">
+          <button class="sim-btn p-4 bg-slate-50 hover:bg-white border border-slate-200 hover:border-red-500 rounded-lg text-left transition shadow-sm flex flex-col justify-between" data-scenario="selective_throttling">
             <div>
-              <span class="text-xs font-bold text-red-400 flex items-center gap-1.5"><i class="fa-solid fa-mask"></i> Scenario 3: Selective Throttling</span>
-              <p class="text-[11px] text-slate-300 mt-1">School 104512 reports 96 Mbps on public test but 12.8 Mbps on DepEd Cloud Anchor.</p>
+              <span class="text-xs font-bold text-[#CE1126] flex items-center gap-1.5"><i class="fa-solid fa-mask"></i> Scenario 3: Selective Throttling</span>
+              <p class="text-[11px] text-slate-600 mt-1">School 104512 reports 96 Mbps on public test but 12.8 Mbps on DepEd Cloud Anchor.</p>
             </div>
-            <span class="text-[10px] text-red-400 mt-3 font-mono">Exposes ISP Anti-Gaming</span>
+            <span class="text-[10px] text-[#CE1126] mt-3 font-mono font-medium">Exposes ISP Anti-Gaming</span>
           </button>
 
-          <button class="sim-btn p-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-purple-400 rounded-lg text-left transition flex flex-col justify-between" data-scenario="wan_offline_spool">
+          <button class="sim-btn p-4 bg-slate-50 hover:bg-white border border-slate-200 hover:border-purple-500 rounded-lg text-left transition shadow-sm flex flex-col justify-between" data-scenario="wan_offline_spool">
             <div>
-              <span class="text-xs font-bold text-purple-400 flex items-center gap-1.5"><i class="fa-solid fa-hard-drive"></i> Scenario 4: Offline Spool Flush</span>
-              <p class="text-[11px] text-slate-300 mt-1">Router reachable (1.4ms), WAN drops. Spools in SQLite, flushes upon reconnection.</p>
+              <span class="text-xs font-bold text-purple-700 flex items-center gap-1.5"><i class="fa-solid fa-hard-drive"></i> Scenario 4: Offline Spool Flush</span>
+              <p class="text-[11px] text-slate-600 mt-1">Router reachable (1.4ms), WAN drops. Spools in SQLite, flushes upon reconnection.</p>
             </div>
-            <span class="text-[10px] text-purple-400 mt-3 font-mono">Out-of-Order BQ Partitioning</span>
+            <span class="text-[10px] text-purple-600 mt-3 font-mono font-medium">Out-of-Order BQ Partitioning</span>
           </button>
         </div>
 
         <!-- Live Enricher & Ingestion Stream Output -->
-        <div class="mt-4 p-4 bg-slate-900 border border-slate-800 rounded-lg space-y-2">
-          <div class="flex justify-between items-center text-xs text-slate-400">
+        <div class="mt-4 p-4 bg-slate-900 border border-slate-700 rounded-lg space-y-2">
+          <div class="flex justify-between items-center text-xs text-slate-300">
             <span><i class="fa-solid fa-terminal text-emerald-400 mr-1"></i> Live Enricher & BigQuery Partition Inspector:</span>
-            <span id="simStatusPill" class="text-emerald-400 font-mono">READY</span>
+            <span id="simStatusPill" class="text-emerald-400 font-mono font-semibold">READY</span>
           </div>
           <div class="code-box text-[11px]" id="simConsoleOutput">Click any scenario above to observe real-time payload enrichment and agent actions.</div>
         </div>
@@ -568,19 +582,19 @@
   </main>
 
   <!-- Modal: COA Dispute Memo Inspector -->
-  <div id="memoModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-2xl w-full p-6 space-y-4 max-h-[85vh] flex flex-col">
-      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-        <h3 class="text-sm font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-file-contract text-amber-400"></i> COA-Ready Notice of SLA Breach & Rebate Deduction Memo
+  <div id="memoModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-xl max-w-2xl w-full p-6 space-y-4 max-h-[85vh] flex flex-col shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+        <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-file-contract text-amber-500"></i> COA-Ready Notice of SLA Breach & Rebate Deduction Memo
         </h3>
-        <button id="btnCloseMemo" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+        <button id="btnCloseMemo" class="text-slate-400 hover:text-slate-700 text-lg transition"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <div class="flex-1 overflow-y-auto prose prose-invert prose-xs text-slate-300 font-mono text-xs whitespace-pre-wrap bg-slate-950 p-4 rounded border border-slate-800" id="memoModalContent"></div>
-      <div class="flex justify-end gap-3 pt-2 border-t border-slate-800">
-        <button id="btnModalClose" class="px-4 py-2 bg-slate-800 text-slate-300 text-xs rounded hover:bg-slate-700">Close</button>
-        <button id="btnModalApprove" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold text-xs rounded flex items-center gap-1.5">
-          <i class="fa-solid fa-signature"></i> Approve Deduction (HITL)
+      <div class="flex-1 overflow-y-auto text-slate-800 font-mono text-xs whitespace-pre-wrap bg-slate-50 p-4 rounded border border-slate-200 leading-relaxed" id="memoModalContent"></div>
+      <div class="flex justify-end gap-3 pt-3 border-t border-slate-200">
+        <button id="btnModalClose" class="px-4 py-2 bg-slate-100 text-slate-700 text-xs font-semibold rounded border border-slate-300 hover:bg-slate-200 transition">Close</button>
+        <button id="btnModalApprove" class="px-4 py-2 bg-[#0038A8] hover:bg-[#002b80] text-white font-bold text-xs rounded flex items-center gap-1.5 shadow transition">
+          <i class="fa-solid fa-signature text-[#FCD116]"></i> Approve Deduction (HITL)
         </button>
       </div>
     </div>
@@ -589,14 +603,23 @@
   <!-- Notification Toast -->
   <div id="toastBox" class="toast">
     <div class="flex items-center gap-3">
-      <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
-      <span id="toastMessage" class="text-xs font-medium">Notification</span>
+      <i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>
+      <span id="toastMessage" class="text-xs font-medium text-slate-800">Notification</span>
     </div>
   </div>
 
+  <!-- Floating Demo Disclaimer Watermark -->
+  <div class="demo-watermark-pill shadow-md">
+    <i class="fa-solid fa-flask text-amber-500 mr-1.5"></i> DepEd Demo Prototype &bull; Evaluation Only
+  </div>
+
   <!-- Footer -->
-  <footer class="bg-slate-900 border-t border-slate-800 px-6 py-4 text-center text-xs text-slate-500">
-    Department of Education (DepEd) &bull; Information and Communications Technology Service (ICTS) &bull; Google Cloud & Gemini Enterprise
+  <footer class="bg-white border-t border-slate-200 px-6 py-6 text-center text-xs text-slate-500 space-y-2">
+    <div class="font-semibold text-slate-700">Republic of the Philippines &bull; Department of Education (DepEd) &bull; Information and Communications Technology Service (ICTS)</div>
+    <div class="text-[11px] text-amber-800 bg-amber-50 inline-block px-3 py-1 rounded border border-amber-200 font-medium">
+      <i class="fa-solid fa-triangle-exclamation mr-1"></i> DEMO ONLY &mdash; Simulated telemetry, mock school identities, and synthetic ISP records for technical evaluation only. Not for official government procurement or COA audit filings.
+    </div>
+    <div class="text-[10px] text-slate-400 mt-1">Powered by Google Cloud Run, BigQuery, and Gemini Enterprise</div>
   </footer>
 
   <script src="/static/app.js"></script>

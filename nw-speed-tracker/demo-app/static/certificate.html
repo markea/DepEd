@@ -20,6 +20,25 @@
       border: 8px double #0038A8;
       box-shadow: 0 10px 30px rgba(0,0,0,0.15);
       position: relative;
+      overflow: hidden;
+    }
+    .watermark {
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-28deg);
+      font-size: 58pt;
+      font-weight: 900;
+      color: rgba(206, 17, 38, 0.12);
+      text-transform: uppercase;
+      letter-spacing: 8px;
+      pointer-events: none;
+      border: 5px dashed rgba(206, 17, 38, 0.2);
+      padding: 8px 36px;
+      border-radius: 12px;
+      white-space: nowrap;
+      font-family: sans-serif;
+      z-index: 10;
     }
     .header-block {
       text-align: center;
@@ -128,12 +147,17 @@
 </head>
 <body>
 
+  <div class="no-print" style="max-width: 800px; margin: 0 auto 0.75rem auto; background: #FEF3C7; border: 2px solid #F59E0B; color: #92400E; padding: 0.6rem 1rem; border-radius: 6px; font-family: sans-serif; font-size: 9.5pt; text-align: center; font-weight: 600;">
+    ⚠️ DEMO & EVALUATION PROTOTYPE ONLY: Generated using synthetic telemetry benchmarks for DepEd ICTS showcase.
+  </div>
+
   <div class="no-print" style="max-width: 800px; margin: 0 auto 1rem auto; display: flex; justify-content: space-between;">
     <button onclick="window.history.back()" style="padding: 0.5rem 1rem; cursor: pointer;">← Back to Portal</button>
     <button onclick="window.print()" style="background: #0038A8; color: #FFF; padding: 0.5rem 1.5rem; border: none; font-weight: bold; cursor: pointer; border-radius: 4px;">🖨️ Print / Save as PDF</button>
   </div>
 
   <div class="cert-container" id="certRoot">
+    <div class="watermark">DEMO ONLY</div>
     <div class="header-block">
       <p class="rep-title">Republic of the Philippines</p>
       <h1 class="dept-title">DEPARTMENT OF EDUCATION</h1>
