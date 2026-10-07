@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DepEd ICTS - Official Speed Test & SLA Compliance Certificate</title>
+  <style>
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      background: #E2E8F0;
+      color: #0F172A;
+      margin: 0;
+      padding: 2rem;
+    }
+    .cert-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #FFFFFF;
+      padding: 3rem;
+      border: 8px double #0038A8;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      position: relative;
+    }
+    .header-block {
+      text-align: center;
+      border-bottom: 2px solid #0038A8;
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .rep-title {
+      font-size: 14pt;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0;
+    }
+    .dept-title {
+      font-size: 18pt;
+      font-weight: bold;
+      color: #0038A8;
+      margin: 0.3rem 0;
+    }
+    .sub-title {
+      font-size: 11pt;
+      font-style: italic;
+      color: #475569;
+      margin: 0;
+    }
+    .cert-heading {
+      font-size: 20pt;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #CE1126;
+      margin: 1.5rem 0 0.5rem 0;
+      text-transform: uppercase;
+    }
+    .cert-id {
+      font-family: monospace;
+      font-size: 10pt;
+      color: #64748B;
+    }
+    .cert-body {
+      font-size: 12pt;
+      line-height: 1.6;
+      margin: 1.5rem 0;
+      text-align: justify;
+    }
+    .metrics-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-family: sans-serif;
+      font-size: 10pt;
+    }
+    .metrics-table th, .metrics-table td {
+      border: 1px solid #CBD5E1;
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+    }
+    .metrics-table th {
+      background: #F1F5F9;
+      color: #0038A8;
+      font-weight: 600;
+    }
+    .badge-pass {
+      color: #059669;
+      font-weight: bold;
+    }
+    .badge-breach {
+      color: #DC2626;
+      font-weight: bold;
+    }
+    .footer-block {
+      margin-top: 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .signature-area {
+      text-align: center;
+      width: 250px;
+      border-top: 1px solid #000;
+      padding-top: 0.5rem;
+      font-size: 11pt;
+    }
+    .qr-area {
+      text-align: center;
+      font-family: monospace;
+      font-size: 8pt;
+      color: #64748B;
+    }
+    .qr-box {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 0.5rem auto;
+      border: 1px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9pt;
+      background: #F8FAFC;
+    }
+    @media print {
+      body { background: none; padding: 0; }
+      .cert-container { box-shadow: none; border-width: 4px; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="no-print" style="max-width: 800px; margin: 0 auto 1rem auto; display: flex; justify-content: space-between;">
+    <button onclick="window.history.back()" style="padding: 0.5rem 1rem; cursor: pointer;">← Back to Portal</button>
+    <button onclick="window.print()" style="background: #0038A8; color: #FFF; padding: 0.5rem 1.5rem; border: none; font-weight: bold; cursor: pointer; border-radius: 4px;">🖨️ Print / Save as PDF</button>
+  </div>
+
+  <div class="cert-container" id="certRoot">
+    <div class="header-block">
+      <p class="rep-title">Republic of the Philippines</p>
+      <h1 class="dept-title">DEPARTMENT OF EDUCATION</h1>
+      <p class="sub-title">Information and Communications Technology Service (ICTS)</p>
+      <p class="sub-title">Technology Infrastructure Division — National NetPulse System</p>
+      
+      <div class="cert-heading">Certificate of Internet Speed & SLA Compliance</div>
+      <div class="cert-id" id="certId">DEPED-CERT-2026-104512</div>
+    </div>
+
+    <div class="cert-body">
+      This is to certify that pursuant to the <strong>DepEd Computerization Program (DCP)</strong> and 
+      <strong>Republic Act No. 12009 (New Government Procurement Act)</strong>, continuous telemetry was collected 
+      from the designated Administrative PC at:
+    </div>
+
+    <table class="metrics-table">
+      <tr>
+        <th width="30%">School Name:</th>
+        <td id="schoolName">Bacoor National High School</td>
+        <th width="20%">BEIS ID:</th>
+        <td id="schoolId">104512</td>
+      </tr>
+      <tr>
+        <th>Region & Division:</th>
+        <td id="schoolRegionDivision">Region IV-A (CALABARZON) | Cavite Province</td>
+        <th>Assigned ISP:</th>
+        <td id="ispName">SpeedNet Regional (100.0 Mbps Fiber)</td>
+      </tr>
+      <tr>
+        <th>Local Hop Verification:</th>
+        <td colspan="3" id="localHopText">
+          <span class="badge-pass">VERIFIED HEALTHY</span> — Admin PC connected via Wired Ethernet (1.25ms router ping, 0.0% loss). Internal school wiring is free of defects.
+        </td>
+      </tr>
+    </table>
+
+    <p style="font-weight: bold; margin-bottom: 0.5rem;">Verified Dual-Probe School-Hour Performance (07:00 AM – 05:00 PM PHT):</p>
+    <table class="metrics-table">
+      <thead>
+        <tr>
+          <th>Metric Dimension</th>
+          <th>Contracted CIR</th>
+          <th>Measured 5-Day Average</th>
+          <th>Compliance Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>DepEd Cloud Anchor Speed</strong></td>
+          <td id="contractedSpeed">100.0 Mbps</td>
+          <td id="measuredSpeed">14.2 Mbps</td>
+          <td id="speedStatus"><span class="badge-breach">SUB-50% SLA BREACH (14.2%)</span></td>
+        </tr>
+        <tr>
+          <td><strong>Public Reference Speedtest</strong></td>
+          <td>100.0 Mbps</td>
+          <td id="publicSpeed">95.8 Mbps</td>
+          <td><span>ISP Whitelisted / Shaping Gap: 81.6 Mbps</span></td>
+        </tr>
+        <tr>
+          <td><strong>Average WAN Latency</strong></td>
+          <td>&lt; 50.0 ms</td>
+          <td id="avgPing">32.4 ms</td>
+          <td><span class="badge-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td><strong>Average WAN Packet Loss</strong></td>
+          <td>&lt; 1.0 %</td>
+          <td id="avgLoss">0.0 %</td>
+          <td><span class="badge-pass">PASS</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="cert-body" id="verdictText">
+      <strong>OFFICIAL AUDIT FINDING:</strong> Measured throughput to the sovereign DepEd Cloud Educational Anchor 
+      fell below 50% of contracted bandwidth for five (5) consecutive school days during instructional hours, while public speedtest 
+      traffic remained unthrottled. This establishes verifiable <strong>ISP Selective Traffic Shaping</strong>. 
+      Under contract terms, DepEd is entitled to a mandatory <strong>PHP 3,125.00</strong> billing rebate deduction.
+    </div>
+
+    <div class="footer-block">
+      <div class="qr-area">
+        <div class="qr-box">
+          <svg viewBox="0 0 100 100" width="80" height="80">
+            <rect width="100" height="100" fill="#FFF"/>
+            <path d="M10 10h30v30h-30zM50 10h10v10h-10zM70 10h20v20h-20zM10 50h10v20h-10zM30 50h20v10h-20zM10 80h30v10h-30zM60 50h30v30h-30z" fill="#0038A8"/>
+          </svg>
+        </div>
+        <div>HMAC-SHA256 SECURED SEAL</div>
+        <div id="certHash" style="font-size: 6pt; word-break: break-all;">9c8b7a6f...f3e2d1c0</div>
+      </div>
+
+      <div class="signature-area">
+        <strong>DIRECTOR IV, ICTS</strong><br>
+        Department of Education<br>
+        Republic of the Philippines
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const schoolId = params.get('school_id') || '104512';
+
+    fetch(`/api/v1/schools/${schoolId}/certificate`)
+      .then(res => res.json())
+      .then(cert => {
+        document.getElementById('certId').innerText = cert.certificate_id;
+        document.getElementById('schoolName').innerText = cert.school_name;
+        document.getElementById('schoolId').innerText = cert.school_id;
+        document.getElementById('schoolRegionDivision').innerText = `${cert.region_name} | ${cert.division_name}`;
+        document.getElementById('ispName').innerText = `${cert.isp_name} (${cert.contracted_cir_mbps} Mbps)`;
+        document.getElementById('contractedSpeed').innerText = `${cert.contracted_cir_mbps} Mbps`;
+        document.getElementById('measuredSpeed').innerText = `${cert.measured_5day_avg_speed_mbps} Mbps`;
+        document.getElementById('avgPing').innerText = `${cert.measured_5day_avg_ping_ms} ms`;
+        document.getElementById('avgLoss').innerText = `${cert.measured_5day_avg_loss_pct} %`;
+        document.getElementById('certHash').innerText = cert.hmac_sha256_seal;
+        
+        if (cert.compliance_status === 'COMPLIANT') {
+          document.getElementById('speedStatus').innerHTML = '<span class="badge-pass">COMPLIANT (100%)</span>';
+          document.getElementById('verdictText').innerHTML = `<strong>OFFICIAL AUDIT FINDING:</strong> School network meets all contracted Service Level Agreements with an average school-hour delivery of ${cert.measured_5day_avg_speed_mbps} Mbps. Full monthly disbursement is authorized under RA 12009.`;
+        }
+      })
+      .catch(err => console.error("Error loading certificate:", err));
+  </script>
+</body>
+</html>
