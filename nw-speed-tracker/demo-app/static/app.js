@@ -6,18 +6,34 @@ let nlChartInstance = null;
 let activeSchoolId = "104512";
 let activeMemoViolationId = null;
 
-// Geospatial Map State
+// Geospatial Map State (Google Maps Platform)
 let phMap = null;
-let mapHeatLayer = null;
-let mapMarkersLayer = null;
+let googleHeatmapLayer = null;
+let googleMarkers = [];
+let googleInfoWindow = null;
 let mapDataFeatures = [];
 let activeMapFilter = "ALL";
 let activeMapLayerMode = "heat"; // 'heat' or 'pins'
 
+// Dark theme map styles for Google Maps
+const GOOGLE_MAPS_DARK_STYLE = [
+  { elementType: "geometry", stylers: [{ color: "#0B1120" }] },
+  { elementType: "labels.text.fill", stylers: [{ color: "#94A3B8" }] },
+  { elementType: "labels.text.stroke", stylers: [{ color: "#0F172A" }] },
+  { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [{ color: "#334155" }, { weight: 1.5 }] },
+  { featureType: "administrative.province", elementType: "geometry.stroke", stylers: [{ color: "#1E293B" }, { weight: 1 }] },
+  { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#0F172A" }] },
+  { featureType: "poi", elementType: "geometry", stylers: [{ color: "#1E293B" }] },
+  { featureType: "road", elementType: "geometry", stylers: [{ color: "#1E293B" }] },
+  { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#334155" }] },
+  { featureType: "water", elementType: "geometry", stylers: [{ color: "#030712" }] },
+  { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#38BDF8" }] }
+];
+
 document.addEventListener("DOMContentLoaded", () => {
   initTabs();
   initRoleSwitcher();
-  initMap();
+  loadGoogleMapsAndInit();
   loadNationalSummary();
   loadDivisionWatchlist();
   loadSchoolPortal(activeSchoolId);
@@ -40,8 +56,8 @@ function initTabs() {
       const targetId = btn.getAttribute("data-tab");
       document.getElementById(targetId).classList.remove("hidden");
 
-      if (targetId === "tab1" && phMap) {
-        setTimeout(() => phMap.invalidateSize(), 200);
+      if (targetId === "tab1" && phMap && typeof google !== "undefined") {
+        setTimeout(() => google.maps.event.trigger(phMap, "resize"), 150);
       }
 
       if (targetId === "tab3" && dualProbeChartInstance) {
@@ -77,29 +93,64 @@ function showToast(msg) {
   setTimeout(() => { toast.style.display = "none"; }, 3500);
 }
 
-// ==================== GEOSPATIAL MAP & CONNECTIVITY HEATMAP ====================
+// ==================== GEOSPATIAL MAP & GOOGLE MAPS PLATFORM ====================
+let googleMapsLoadingPromise = null;
+
+function loadGoogleMapsAndInit() {
+  if (phMap) return;
+  if (typeof google !== "undefined" && google.maps) {
+    initMap();
+    return;
+  }
+  if (!googleMapsLoadingPromise) {
+    googleMapsLoadingPromise = fetch("/api/v1/config/maps-key")
+      .then(res => res.json())
+      .then(data => {
+        return new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(data.maps_api_key)}&libraries=visualization&v=weekly`;
+          script.async = true;
+          script.onload = () => {
+            initMap();
+            resolve();
+          };
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+      })
+      .catch(err => {
+        console.error("Failed to load Google Maps API:", err);
+      });
+  }
+}
+
 function initMap() {
   if (phMap) return;
 
   const mapEl = document.getElementById("phConnectivityMap");
   if (!mapEl) return;
 
+  if (typeof google === "undefined" || !google.maps) {
+    loadGoogleMapsAndInit();
+    return;
+  }
+
   // Center on Philippines Archipelago: [12.8797, 121.7740], zoom 6
-  phMap = L.map("phConnectivityMap", {
+  phMap = new google.maps.Map(mapEl, {
+    center: { lat: 12.8797, lng: 121.7740 },
+    zoom: 6,
+    styles: GOOGLE_MAPS_DARK_STYLE,
+    mapTypeControl: true,
+    mapTypeControlOptions: {
+      style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+      position: google.maps.ControlPosition.TOP_RIGHT,
+    },
+    streetViewControl: false,
+    fullscreenControl: true,
     zoomControl: true,
-    scrollWheelZoom: false,
-    minZoom: 5,
-    maxZoom: 18,
-  }).setView([12.8797, 121.7740], 6);
+  });
 
-  // CartoDB Dark Matter tiles
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: "abcd",
-    maxZoom: 19,
-  }).addTo(phMap);
-
-  mapMarkersLayer = L.layerGroup().addTo(phMap);
+  googleInfoWindow = new google.maps.InfoWindow();
 
   // Map Filter Buttons
   const filterBtns = document.querySelectorAll(".map-filter-btn");
@@ -126,7 +177,7 @@ function initMap() {
       btnHeat.className = "px-2.5 py-1 rounded text-xs font-semibold bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 flex items-center gap-1";
       btnPins.className = "px-2.5 py-1 rounded text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-1";
       renderMapLayers();
-      showToast("Switched to Heat Density Cloud view");
+      showToast("Switched to Google Maps Heat Density Cloud view");
     });
 
     btnPins.addEventListener("click", () => {
@@ -158,78 +209,92 @@ async function loadMapData() {
 }
 
 function renderMapLayers() {
-  if (!phMap) return;
+  if (!phMap || typeof google === "undefined") return;
 
-  // Clear existing layers
-  if (mapHeatLayer) {
-    phMap.removeLayer(mapHeatLayer);
-    mapHeatLayer = null;
+  // Clear existing HeatmapLayer
+  if (googleHeatmapLayer) {
+    googleHeatmapLayer.setMap(null);
+    googleHeatmapLayer = null;
   }
-  mapMarkersLayer.clearLayers();
+
+  // Clear existing Markers
+  googleMarkers.forEach(m => m.setMap(null));
+  googleMarkers = [];
 
   if (activeMapLayerMode === "heat") {
-    // Generate weighted heat points: [lat, lng, intensity]
-    const heatPoints = mapDataFeatures
+    // Generate Google Maps Weighted LatLng points
+    const heatData = mapDataFeatures
       .filter(f => f.latitude && f.longitude)
-      .map(f => [f.latitude, f.longitude, f.heat_weight || 0.5]);
+      .map(f => ({
+        location: new google.maps.LatLng(f.latitude, f.longitude),
+        weight: (f.heat_weight || 0.5) * 8
+      }));
 
-    if (heatPoints.length > 0 && typeof L.heatLayer === "function") {
-      mapHeatLayer = L.heatLayer(heatPoints, {
+    if (google.maps.visualization && google.maps.visualization.HeatmapLayer) {
+      googleHeatmapLayer = new google.maps.visualization.HeatmapLayer({
+        data: heatData,
+        map: phMap,
         radius: 35,
-        blur: 25,
-        maxZoom: 12,
-        minOpacity: 0.35,
-        gradient: {
-          0.2: "#38bdf8", // Cyan (Weather)
-          0.4: "#facc15", // Yellow (Wi-Fi)
-          0.7: "#f97316", // Orange (Throttling)
-          1.0: "#ef4444"  // Red (Critical Outage)
-        }
-      }).addTo(phMap);
+        opacity: 0.85,
+        gradient: [
+          "rgba(0, 0, 0, 0)",
+          "rgba(56, 189, 248, 0.7)",   // Cyan
+          "rgba(250, 204, 21, 0.8)",   // Yellow
+          "rgba(249, 115, 22, 0.9)",   // Orange
+          "rgba(239, 68, 68, 1.0)"     // Red (Critical Outage)
+        ]
+      });
     }
 
-    // In heat mode, also add subtle clickable circle markers for schools with issues
+    // In heat mode, also add subtle clickable circle markers for schools
     mapDataFeatures.forEach(feat => {
       if (!feat.latitude || !feat.longitude) return;
 
-      const marker = L.circleMarker([feat.latitude, feat.longitude], {
-        radius: feat.severity === "CRITICAL" ? 9 : 7,
+      const circle = new google.maps.Circle({
+        strokeColor: "#FFFFFF",
+        strokeOpacity: 0.8,
+        strokeWeight: 1.5,
         fillColor: feat.badge_color,
-        color: "#FFFFFF",
-        weight: 1.5,
-        opacity: 0.9,
-        fillOpacity: 0.85,
-        className: feat.severity === "CRITICAL" ? "pulse-marker-critical" : "",
+        fillOpacity: 0.75,
+        map: phMap,
+        center: { lat: feat.latitude, lng: feat.longitude },
+        radius: feat.severity === "CRITICAL" ? 9000 : 6000
       });
 
-      marker.bindPopup(buildSchoolPopupHtml(feat), { maxWidth: 320 });
-      mapMarkersLayer.addLayer(marker);
+      circle.addListener("click", () => {
+        googleInfoWindow.setContent(buildSchoolPopupHtml(feat));
+        googleInfoWindow.setPosition({ lat: feat.latitude, lng: feat.longitude });
+        googleInfoWindow.open(phMap);
+      });
+
+      googleMarkers.push(circle);
     });
 
   } else {
-    // Pins mode: high-contrast markers with tooltips and popups
+    // Pins mode: high-contrast SVG markers with custom color pins
     mapDataFeatures.forEach(feat => {
       if (!feat.latitude || !feat.longitude) return;
 
-      const isCritical = feat.severity === "CRITICAL";
-      const marker = L.circleMarker([feat.latitude, feat.longitude], {
-        radius: isCritical ? 10 : 8,
-        fillColor: feat.badge_color,
-        color: isCritical ? "#FECACA" : "#FFFFFF",
-        weight: 2,
-        opacity: 1,
-        fillOpacity: 0.9,
-        className: isCritical ? "pulse-marker-critical" : "",
+      const marker = new google.maps.Marker({
+        position: { lat: feat.latitude, lng: feat.longitude },
+        map: phMap,
+        title: feat.school_name,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: feat.severity === "CRITICAL" ? 10 : 7,
+          fillColor: feat.badge_color,
+          fillOpacity: 0.95,
+          strokeColor: "#FFFFFF",
+          strokeWeight: 2,
+        }
       });
 
-      marker.bindTooltip(`<strong>${feat.school_name}</strong><br><span style="color:${feat.badge_color}">${feat.issue_label}</span>`, {
-        direction: "top",
-        offset: [0, -8],
-        className: "bg-slate-900 text-slate-100 border border-slate-700 text-xs px-2 py-1 rounded shadow"
+      marker.addListener("click", () => {
+        googleInfoWindow.setContent(buildSchoolPopupHtml(feat));
+        googleInfoWindow.open(phMap, marker);
       });
 
-      marker.bindPopup(buildSchoolPopupHtml(feat), { maxWidth: 320 });
-      mapMarkersLayer.addLayer(marker);
+      googleMarkers.push(marker);
     });
   }
 }
@@ -274,7 +339,7 @@ function buildSchoolPopupHtml(feat) {
       </div>
 
       <div class="mt-3 pt-2 border-t border-slate-700 flex justify-end">
-        <button onclick="selectSchool('${feat.school_id}')" class="px-2.5 py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-white font-semibold text-[11px] flex items-center gap-1.5 transition shadow">
+        <button onclick="selectSchool('${feat.school_id}')" class="px-2.5 py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-white font-semibold text-[11px] flex items-center gap-1.5 transition shadow cursor-pointer">
           <i class="fa-solid fa-arrow-up-right-from-square"></i> Open School Portal ($0 BI)
         </button>
       </div>
@@ -283,15 +348,17 @@ function buildSchoolPopupHtml(feat) {
 }
 
 function zoomToHotspot(lat, lng, zoom, regionId) {
-  if (!phMap) return;
-  phMap.setView([lat, lng], zoom);
-  showToast(`Zoomed map to ${regionId} Hotspot Cluster`);
+  if (!phMap || typeof google === "undefined") return;
+  phMap.panTo({ lat, lng });
+  phMap.setZoom(zoom);
+  showToast(`Zoomed Google Map to ${regionId} Hotspot Cluster`);
 }
 
 function resetMapView() {
-  if (!phMap) return;
-  phMap.setView([12.8797, 121.7740], 6);
-  showToast("Reset map to National Archipelago view");
+  if (!phMap || typeof google === "undefined") return;
+  phMap.panTo({ lat: 12.8797, lng: 121.7740 });
+  phMap.setZoom(6);
+  showToast("Reset Google Map to National Archipelago view");
 }
 
 // Tab 1: Load National Summary & 17 Regions

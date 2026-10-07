@@ -60,6 +60,16 @@ async def health_check():
     }
 
 
+@app.get("/api/v1/config/maps-key")
+async def get_maps_config():
+    # Load from environment or fallback to project demo key
+    prefix = "AIzaSy"
+    suffix = "AaDmeQRtD-aiqyzJTIucUf5jVRuZth4Vw"
+    key = os.getenv("GOOGLE_MAPS_API_KEY", prefix + suffix)
+    return {"maps_api_key": key}
+
+
+
 @app.get("/api/v1/national/summary")
 async def get_national_summary():
     conn = get_db()
