@@ -55,7 +55,7 @@ An interactive, full-stack demonstration prototype is deployed and running on Go
 | **Live Service URL** | [`https://deped-netpulse-demo-948357328216.asia-southeast1.run.app`](https://deped-netpulse-demo-948357328216.asia-southeast1.run.app) |
 | **Source Directory** | [`demo-app/`](./demo-app/) |
 | **AI Models Active** | `gemini-3.8-flash` (Conversational Analytics & Diagnostics) + `gemini-3.1-pro` (ISP SLA Auditor) |
-| **Geospatial Analytics** | Interactive **Nationwide School Connectivity Issues Heatmap** (`Leaflet.js` + `Leaflet.heat` + CartoDB Dark) with dual-layer mode (Heat Density Cloud vs. Individual Pins), 18 seeded showcase schools with realistic coordinates, and 1-click School Portal drilldown. |
+| **Geospatial Analytics** | Native **Google Maps Platform** (`maps.googleapis.com` JavaScript API + Visualization Library `google.maps.visualization.HeatmapLayer` with custom dark theme) featuring dual-layer modes (Heat Density Cloud vs. Individual Outage Pins & CIR Circles), 18 seeded showcase schools with precise coordinates, and 1-click School Portal drilldown. |
 | **Pre-Seeded Data** | **47,000 public schools** across **17 Philippine administrative regions**, 5 major ISPs (PLDT, Globe, Converge, SpeedNet, Starlink), and 5 days of hourly school-hours telemetry. |
 
 ### How to Access the Live Demo
