@@ -14,7 +14,7 @@ This repository is structured on a **per-use-case basis**, where each top-level 
 
 | Use-Case Folder | Initiative / Solution Name | Overview | Documentation |
 | :--- | :--- | :--- | :--- |
-| [**`nw-speed-tracker/`**](./nw-speed-tracker/) | **National Network Speed Tracker & Autonomous ISP SLA Governance Platform** | Decoupled, push-based internet telemetry and autonomous ISP contract SLA auditing across **47,000+ public schools** using Google Cloud (`Pub/Sub`, `Cloud Run`, `BigQuery`, `Looker`) and **Gemini Enterprise** (Conversational Analytics, ISP SLA Auditor Agent, Grounded Diagnostics, and 47k Locust Simulation). | • [Overview (`README.md`)](./nw-speed-tracker/README.md)<br/>• [BRD](./nw-speed-tracker/01_DEPED_NW_SPEED_TRACKER_BRD.md)<br/>• [TDD](./nw-speed-tracker/02_DEPED_NW_SPEED_TRACKER_TDD.md) |
+| [**`nw-speed-tracker/`**](./nw-speed-tracker/) | **National Network Speed Tracker & Autonomous ISP SLA Governance Platform** | Decoupled, push-based internet telemetry and autonomous ISP contract SLA auditing across **47,000+ public schools** using Google Cloud (`Pub/Sub`, `Cloud Run`, `BigQuery`, `Looker`) and **Gemini Enterprise** (Conversational Analytics, ISP SLA Auditor Agent, Grounded Diagnostics, and 47k Locust Simulation). | • [Overview (`README.md`)](./nw-speed-tracker/README.md)<br/>• [BRD (`v2.0`)](./nw-speed-tracker/01_DEPED_NW_SPEED_TRACKER_BRD.md)<br/>• [Production TDD (`v2.0`)](./nw-speed-tracker/02_DEPED_NW_SPEED_TRACKER_TDD.md)<br/>• [Prototype & Demo TDD (`v1.0`)](./nw-speed-tracker/03_DEPED_NW_SPEED_TRACKER_PROTOTYPE_DEMO_TDD.md) |
 
 ---
 
