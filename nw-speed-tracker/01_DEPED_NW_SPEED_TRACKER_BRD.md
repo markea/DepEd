@@ -67,10 +67,12 @@ However, verifying whether these Internet Service Providers (ISPs) actually deli
 flowchart TB
     subgraph Edge["1. Zero-CapEx School Edge Layer (47,000 DCP Admin PCs)"]
         PC["Existing DCP Administrative PC<br/>(Windows .msi Service / Linux systemd Daemon)"]
-        LOCAL["Local Hop Probe (PC -> School Router)<br/>Captures Ethernet vs. Wi-Fi RSSI & Gateway Ping"]
+        LOCAL["Local Hop Probe (PC to School Router)<br/>Captures Ethernet vs. Wi-Fi RSSI & Gateway Ping"]
         DUAL["Dual-Probe WAN Test (3–4x Daily, 7 AM–5 PM)<br/>Primary: DepEd Cloud Anchor | Secondary: Ookla / M-Lab"]
         SPOOL["Randomized Jitter (1–900s) + Offline SQLite Spool<br/>('PC-Online / WAN-Offline' Proof)"]
-        PC --> LOCAL --> DUAL --> SPOOL
+        PC --> LOCAL
+        LOCAL --> DUAL
+        DUAL --> SPOOL
     end
 
     subgraph Ingestion["2. Decoupled Google Cloud Ingestion & Warehouse"]
@@ -78,7 +80,10 @@ flowchart TB
         PS["Cloud Pub/Sub<br/>(Burst & Outage Backlog Buffer)"]
         CR["Cloud Run Serverless Enricher<br/>(HMAC Verification + School/ISP Metadata)"]
         BQ[("BigQuery Time-Series Warehouse<br/>Partitioned by DATE(measured_at)<br/>Clustered by Region / Division / ISP / School")]
-        SPOOL -->|HTTPS JSON Push| APIGW --> PS --> CR --> BQ
+        SPOOL -->|HTTPS JSON Push| APIGW
+        APIGW --> PS
+        PS --> CR
+        CR --> BQ
     end
 
     subgraph GeminiEnterprise["3. Gemini Enterprise Intelligence & Action Layer"]
@@ -97,8 +102,16 @@ flowchart TB
         CO["Tier 1: Central Office (Looker + Gemini Enterprise)<br/>National Heatmap & HITL Rebate Sign-Off"]
         RO["Tier 2: 17 Regions & 220+ Divisions (Looker + Gemini Enterprise)<br/>Cluster Outages & Division SLA Governance"]
         PR["Tier 3: 47,000 School Principals (Cloud Run School Portal via Google SSO)<br/>Zero Per-Seat BI Cost | School Charts, AI Diagnosis & Speed Certificates"]
-        CA & DIAG & SLA & TICKET --> CO & RO
-        BQ & DIAG --> PR
+        CA --> CO
+        CA --> RO
+        DIAG --> CO
+        DIAG --> RO
+        SLA --> CO
+        SLA --> RO
+        TICKET --> CO
+        TICKET --> RO
+        BQ --> PR
+        DIAG --> PR
     end
 ```
 

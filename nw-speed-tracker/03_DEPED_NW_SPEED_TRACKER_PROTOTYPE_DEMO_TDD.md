@@ -64,12 +64,17 @@ flowchart TB
         CERT_GEN["QR-Verifiable Speed Certificate Generator<br/>(Printable HTML/PDF + HMAC Signature Verification)"]
         DB[("Embedded Time-Series Store (SQLite / DuckDB)<br/>Mirrors Date-Partitioned BigQuery Schema & MV Rollups")]
 
-        API --> ENRICHER & SIM_ENGINE & AI_ENGINE & CERT_GEN
-        ENRICHER & SIM_ENGINE --> DB
-        AI_ENGINE <--> DB
+        API --> ENRICHER
+        API --> SIM_ENGINE
+        API --> AI_ENGINE
+        API --> CERT_GEN
+        ENRICHER --> DB
+        SIM_ENGINE --> DB
+        AI_ENGINE --- DB
     end
 
-    Browser <-->|REST JSON API| API
+    Browser -->|REST JSON API| API
+    API -->|JSON Responses| Browser
 ```
 
 ---

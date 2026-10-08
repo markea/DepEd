@@ -56,8 +56,10 @@ flowchart TB
         DUAL_PROBE["Step 2: Dual-Probe WAN Test (3-4x/day, 7 AM-5 PM, 1-900s Jitter)<br/>Probe A: DepEd Cloud Run Anchor | Probe B: M-Lab NDT7 / Ookla WSS"]
         SPOOL[("Local SQLite Spool Queue<br/>('PC-Online / WAN-Offline' Proof + Exponential Backoff)")]
 
-        GO_SVC <--> DPAPI
-        GO_SVC --> LOCAL_HOP --> DUAL_PROBE --> SPOOL
+        GO_SVC --- DPAPI
+        GO_SVC --> LOCAL_HOP
+        LOCAL_HOP --> DUAL_PROBE
+        DUAL_PROBE --> SPOOL
     end
 
     subgraph CloudIngestion["2. Zero-Idle-Cost Google Cloud Ingestion & Anchors"]
@@ -67,15 +69,17 @@ flowchart TB
         PUBSUB["Cloud Pub/Sub Topic (telemetry-raw)<br/>(7-Day Retention | Absorbs Post-Outage Bursts)"]
         CRUN_ENR["Cloud Run Serverless Enricher<br/>(25MB In-Memory 47k School Registry Cache + HMAC Check)"]
 
-        DUAL_PROBE <-->|HTTPS/WSS 443| ANCHOR
-        GO_SVC <--|Ed25519 Verified Pull| CDN_UPD
-        SPOOL -->|HTTPS POST Signed JSON| APIGW --> PUBSUB --> CRUN_ENR
+        DUAL_PROBE -->|HTTPS/WSS 443| ANCHOR
+        CDN_UPD -->|Ed25519 Verified Pull| GO_SVC
+        SPOOL -->|HTTPS POST Signed JSON| APIGW
+        APIGW --> PUBSUB
+        PUBSUB --> CRUN_ENR
     end
 
     subgraph DataWarehouse["3. Date/Time-Partitioned BigQuery Time-Series Warehouse"]
         BQ_RAW[("BigQuery: speedtest_measurements<br/>PARTITION BY DATE(measured_at) [require_partition_filter=true]<br/>CLUSTER BY region_id, division_id, isp_id, school_id")]
         BQ_MV[("BigQuery Partitioned Materialized View:<br/>mv_school_daily_hourly_rollups")]
-        BQ_SLA[("BigQuery: sla_violation_ledger (Partitioned by billing_month)<br/>State: PENDING_DITO_REVIEW -> APPROVED_FOR_REBATE -> DEDUCTED")]
+        BQ_SLA[("BigQuery: sla_violation_ledger (Partitioned by billing_month)<br/>State: PENDING_DITO_REVIEW &rarr; APPROVED_FOR_REBATE &rarr; DEDUCTED")]
         BQ_AUDIT[("BigQuery: agent_audit_trail<br/>PARTITION BY DATE(created_at)")]
 
         CRUN_ENR -->|Storage Write API| BQ_RAW
@@ -89,11 +93,16 @@ flowchart TB
         TIER12["Tier 1 & 2: Looker + Gemini Enterprise<br/>(Central Office, 17 Regions, 220+ Divisions)<br/>Conversational Analytics + HITL Rebate Approval Queue"]
         TIER3["Tier 3: Cost-Guarded Cloud Run School Portal<br/>(47,000 Principals via @deped.gov.ph OIDC/IAP | $0 BI Seat Cost)<br/>15-Min Cached Charts + Gemini 3.8 Flash Cards + QR PDF Certificate"]
 
-        BQ_RAW --> DIAG_FLASH & AUDITOR_PRO
-        AUDITOR_PRO --> BQ_SLA & BQ_AUDIT
-        DIAG_FLASH & AUDITOR_PRO -->|Zero-Touch Technical Ticket| DISPATCH
-        BQ_MV & BQ_SLA --> TIER12
-        BQ_MV & DIAG_FLASH --> TIER3
+        BQ_RAW --> DIAG_FLASH
+        BQ_RAW --> AUDITOR_PRO
+        AUDITOR_PRO --> BQ_SLA
+        AUDITOR_PRO --> BQ_AUDIT
+        DIAG_FLASH -->|Zero-Touch Technical Ticket| DISPATCH
+        AUDITOR_PRO -->|Zero-Touch Technical Ticket| DISPATCH
+        BQ_MV --> TIER12
+        BQ_SLA --> TIER12
+        BQ_MV --> TIER3
+        DIAG_FLASH --> TIER3
     end
 ```
 
