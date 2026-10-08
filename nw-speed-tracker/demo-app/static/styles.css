@@ -218,6 +218,86 @@ body {
   align-items: center;
   gap: 0.5rem;
   pointer-events: auto;
+  transition: all 0.2s ease;
 }
+
+/* ==================== MOBILE & TOUCH RESPONSIVE STYLING ==================== */
+
+/* Hide scrollbar for native touch swiping */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Touch-friendly interactive buttons */
+button, select, input, .tab-btn, .nl-pill, .sim-btn {
+  touch-action: manipulation;
+}
+
+/* Smooth touch scrolling */
+.overflow-x-auto, .overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile Screens (< 640px) */
+@media (max-width: 640px) {
+  .card {
+    padding: 0.875rem;
+    border-radius: 0.625rem;
+  }
+
+  .kpi-card {
+    padding: 0.75rem 0.875rem;
+    border-radius: 0.625rem;
+  }
+
+  .tab-btn {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.78rem;
+    gap: 0.35rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .demo-watermark-pill {
+    bottom: 0.5rem;
+    left: 0.5rem;
+    font-size: 9.5px;
+    padding: 0.25rem 0.6rem;
+    opacity: 0.92;
+  }
+
+  .toast {
+    left: 1rem !important;
+    right: 1rem !important;
+    bottom: 1rem !important;
+    padding: 0.75rem 1rem !important;
+  }
+
+  .code-box {
+    font-size: 0.72rem;
+    padding: 0.65rem;
+  }
+
+  /* Prevent Google Maps infoWindow from overflowing narrow viewports */
+  .gm-style-iw-c {
+    max-width: 310px !important;
+  }
+}
+
+/* Tablet Screens (641px - 1024px) */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .card {
+    padding: 1rem;
+  }
+  .tab-btn {
+    padding: 0.65rem 0.95rem;
+    font-size: 0.82rem;
+  }
+}
+
 
 

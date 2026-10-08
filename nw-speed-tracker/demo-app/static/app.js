@@ -136,12 +136,14 @@ function initMap() {
     return;
   }
 
-  // Center on Philippines Archipelago: [12.8797, 121.7740], zoom 6
+  const isMobile = window.innerWidth < 640;
+  // Center on Philippines Archipelago: [12.8797, 121.7740], zoom 6 (5 on mobile)
   phMap = new google.maps.Map(mapEl, {
     center: { lat: 12.8797, lng: 121.7740 },
-    zoom: 6,
+    zoom: isMobile ? 5 : 6,
+    gestureHandling: "cooperative",
     styles: GOOGLE_MAPS_LIGHT_STYLE,
-    mapTypeControl: true,
+    mapTypeControl: !isMobile,
     mapTypeControlOptions: {
       style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
       position: google.maps.ControlPosition.TOP_RIGHT,
